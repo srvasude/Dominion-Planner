@@ -1,12 +1,12 @@
 import itertools
 
 class InputSets:
+    @staticmethod
     def tf():
-        @staticmethod
         return set(True, False)
-    
+	
+    @staticmethod
     def handCardSet(gameState, number = 'ALL'):
-        @staticmethod
         hand = gameState.pcards[gameState.turn].hand;
         handCards = itertools.chain.from_iterable
                         ((itertools.repeat(c, hand.cards[c]) for c in hand.cards))
