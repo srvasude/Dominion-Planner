@@ -24,3 +24,4 @@ class InputSets:
             costs = set((c.cost for c in stacks))
         stacks = filter(lambda c: c.cost in costs, stacks)
         return itertools.combinations(stacks, number)
+        
