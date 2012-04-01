@@ -1,6 +1,6 @@
 class GameState:
+    @staticmethod
     def setup(cards, initialDeck, players):
-        @staticmethod
         state = GameState()
         state.players = players
         state.pcards = [PlayerCards(deck = initialDeck) for p in players]
