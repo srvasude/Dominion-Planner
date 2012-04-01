@@ -11,6 +11,3 @@ class Player:
     def valueCard(self, gameState, card):
         NotImplemented()
     
-    
-        
-    
