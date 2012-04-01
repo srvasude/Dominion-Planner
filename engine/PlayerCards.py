@@ -50,7 +50,13 @@ class PlayerCards(Object):
     def trashFromHand(self, *args):
         for card in args:
             self.hand[card] -=1
-
+    '''
+        This method allows a player to reveal a card in the deck. This is
+        implemented as a generator so that a player can keep revealing cards
+        until a stop signal has been sent. Keep is a function which states
+        which cards should be revealed and put in hand, and which cards should
+        be discarded
+    '''
     def revealCard(self, stop=False, keep=(lambda x : True)):
         tempCards = CardCounts()
         tempHand = CardCounts()
