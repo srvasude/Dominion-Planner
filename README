@@ -1,0 +1,44 @@
+GameState:
+    x PlayerCards
+    x Player
+    y Stacks (dict)
+    Trash
+    List of (Action, Buys, Coins) for each player
+    Whose turn it is
+
+PlayerCards:
+    Deck ~ (dictionary of cards, # cards, dictionary of known cards)
+    Hand ~ ""
+    Discard ~ ""
+    Currently In Play ~ ""
+    functions:
+        draw x cards
+        merge discard deck
+        trash cards
+        add cards to discard
+        ...
+
+Cards:
+    features of coins, victory points, name, function act, function react
+    (passed in to constructor)
+    - action function( gameState )
+        may prompt players for input, reactions, etc.
+
+Player:
+    chooseInput(gameState, set inputs, actionSimulator)
+        actionSimulator simulates finishing the whole action    
+        returns one of the possible inputs
+    playActionPhase(gameState...)
+    buyCards(gameState...)
+    heuristic knowledge base
+
+InputClass:
+    (functions in terms of gamestate, and picks out input relevant to action)
+    pickTf
+    pickHandset
+    etc
+
+Engine
+    Basically iterate while the game has not ended, and iterate over players actions, buys
+
+
