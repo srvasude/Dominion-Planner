@@ -8,7 +8,8 @@ class InputSets:
     def tf():
         return set(True, False)
 	'''
-        Return a ??? 
+        Return a all combinations of in hand cards.  The number of cards
+        in each combination can be set defining number. 
     '''
     @staticmethod
     def handCardSet(gameState, number = 'ALL'):
