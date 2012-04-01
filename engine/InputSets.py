@@ -17,3 +17,10 @@ class InputSets:
         else:
             return itertools.combinations(handCards, number)
     
+    @staticmethod
+    def stackCardSet(gameState, number = 1, costs = []):
+        stacks = gameState.stacks.keys()
+        if costs == []:
+            costs = set((c.cost for c in stacks))
+        stacks = filter(lambda c: c.cost in costs, stacks)
+        return itertools.combinations(stacks, number)
