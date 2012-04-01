@@ -1,7 +1,11 @@
+import ..engine.InputSets
 '''
     Action Card:
         Trash a Treasure card from your hand. Gain a Treasure card costing
         up to 3 coins more; put it into your hand.
+'''
+'''
+state.players, state.pcards, state.turn, state.stacks
 '''
 @singleton
 class Mine(Card):
@@ -9,5 +13,6 @@ class Mine(Card):
         super(Mine, name='Mine', cost=5, action = mine)
 
 def mine(gameState):
-    requestInput()
+    currentPlayer = gameState.players[gameState.turn]
+    minedCard = currentPlayer.selectInput(InputSets.
     gameState.currentPlayer

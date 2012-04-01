@@ -1,10 +1,15 @@
 import itertools
 
 class InputSets:
+    '''
+        Return True, False choices
+    '''
     @staticmethod
     def tf():
         return set(True, False)
-	
+	'''
+        Return a ??? 
+    '''
     @staticmethod
     def handCardSet(gameState, number = 'ALL'):
         hand = gameState.pcards[gameState.turn].hand;
