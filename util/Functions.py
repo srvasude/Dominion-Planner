@@ -1,15 +1,17 @@
 class CardCounts(dict):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.count = 0
-        super(CardCounts).__init__()
+        dict.__init__(self, *args, **kwargs)
     def __getitem__(self, idx):
         self.setdefault(idx, 0)
         return dict.__getitem__(self, idx)
-
-    def incrementAll(self, keys, count):
-        for key in keys:
-            self[key] += count
-            self.count += count
+    def __setitem__(self, key, value):
+        if value <= 0:
+            self.count -= self[key]
+            del self[key]
+        else:
+            self.count -= (self[key] - value)
+            dict.__setitem__(self, key, value)
 
     def sortedKeys(self):
         sortedItems = self.items()
@@ -73,7 +75,7 @@ class CardCounts(dict):
         curr = self[key]
         self[key] = curr - num if curr > num else 0
         self.count -= num if curr > num else 0
-        if not self[key]
+        if not self[key]:
             del self[key]
 
     def __sub__( self, y ):
