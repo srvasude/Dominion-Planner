@@ -1,7 +1,8 @@
 def Card(Object):
-    def __init__(self, name='None', coins=0, victoryPoints=0,
+    def __init__(self, name='None', cost=0, coins=0, victoryPoints=0,
             action = None, reaction = None):
         self.name = name
+        self.cost = cost
         self.coins = coins
         self.victoryPoints = victoryPoints
         self.action = action
@@ -11,6 +12,6 @@ def singleton(cls):
     instances = {}
     def getinstance():
         if cls not instances:
-            instnaces[cls] = cls()
+            instances[cls] = cls()
         return instances[cls]
     return getinstance
