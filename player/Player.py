@@ -1,13 +1,13 @@
 class Player:
-    def selectInput(self, inputs, gameState, actionSimulator):
+    def selectInput(self, inputs, gameState, actionSimulator=None):
         return NotImplemented()
     
     def playActionPhase(self, gameState):
-        NotImplemented()
+        return NotImplemented()
     
     def playBuyPhase(self, gameState):
-        NotImplemented()
+        return NotImplemented()
     
     def valueCard(self, gameState, card):
-        NotImplemented()
+        return NotImplemented()
     

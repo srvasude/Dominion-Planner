@@ -1,4 +1,4 @@
-def Card(Object):
+class Card(Object):
     def __init__(self, name='None', cost=0, coins=0, victoryPoints=0,
             action = None, reaction = None):
         self.name = name

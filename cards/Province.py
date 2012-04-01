@@ -4,7 +4,7 @@ import Card.py
         +6 Victory Points
 '''
 @singleton
-def Province(Card):
+class Province(Card):
     def __init__(self):
         super(Province, name='Province', cost=8, 
                 victoryPoints=6).__init__()

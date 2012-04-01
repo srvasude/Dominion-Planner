@@ -4,7 +4,7 @@ import Card.py
         Worth 1 Victory point for every 10 cards in your deck (rounded down)
 '''
 @singleton
-def Gardens(Card):
+class Gardens(Card):
     def __init__(self):
         super(Gardens, name='Gardens', cost=4, 
                 victoryPoints = compute).__init__()

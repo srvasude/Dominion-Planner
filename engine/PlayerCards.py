@@ -1,5 +1,5 @@
 import random
-def PlayerCards(Object):
+class PlayerCards(Object):
     '''
         A deck is a tuple/list of a CardCounts of cards, number of cards
         and a CardCounts of visible cards. The discard, hand and 
@@ -18,7 +18,7 @@ def PlayerCards(Object):
     def discardPhase(self):
         self.discardcurrInPlay()
         self.discardHand()
-        self.drawNFromDeck(5)
+        self.draw(5)
     '''
         This method discards the currently in play cards into the 
         discard pile
@@ -62,7 +62,7 @@ def PlayerCards(Object):
         into the deck. If there are also no more cards in the discard pile,
         then the drawing is done since there are no more cards to draw
     '''
-    def drawNFromDeck(self, N):
+    def draw(self, N):
         for i in xrange(N):
             if not self.deck[0]:
                 #In the case that there are no more cards to draw

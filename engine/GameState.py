@@ -1,4 +1,4 @@
-cass GameState:
+class GameState:
     @staticmethod
     def setup(cards, initialDeck, players):
         state = GameState()

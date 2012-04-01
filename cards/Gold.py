@@ -4,6 +4,6 @@ import Card.py
         +3 Coins
 '''
 @singleton
-def Gold(Card):
+class Gold(Card):
     def __init__(self):
         super(Gold, name='Gold', cost='6', coins='3').__init__()

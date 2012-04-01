@@ -1,6 +1,6 @@
 import card.py
 @singleton
-def Laboratory(Card):
+class Laboratory(Card):
     def __init__(self):
         super(Card, name="Laboratory", coins = 0, victoryPoints=0, 
                 action = act, reaction = None).__init__()
