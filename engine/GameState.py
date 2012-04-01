@@ -1,4 +1,4 @@
-import ../util/Functions.py
+import ..util.Functions.py
 class GameState:
     @staticmethod
     def setup(cards, initialDeck, players):

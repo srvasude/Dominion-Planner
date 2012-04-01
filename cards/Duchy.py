@@ -1,4 +1,4 @@
-import Card.py
+from Card import Card, singleton
 '''
     Victory Card:
         +3 Victory Points
@@ -6,4 +6,4 @@ import Card.py
 @singleton
 class Duchy(Card):
     def __init__(self):
-        super(Duchy, name='Duchy', cost=5, victoryPoints=3)
+        super(Duchy, self).__init__(name='Duchy', cost=5, victoryPoints=3)

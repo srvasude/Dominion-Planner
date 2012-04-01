@@ -7,7 +7,6 @@ class Card(Object):
         super(Card, self).__setattr__('victoryPoints', victoryPoints)
         super(Card, self).__setattr__('action', action)
         super(Card, self).__setattr__('reaction', reaction)
-        super(Card, self).__setattr__('ctype', ctype)
      def __hash__(self):
          hsh = sum(hash(self.__getattr__(k)) for k in __slots__)
          return hsh
@@ -15,7 +14,7 @@ class Card(Object):
         raise TypeError("Can't change immutable class")
      __delattr__ = __setattr__
      __slots__ = ('name', 'cost', 'coins', 'victoryPoints', 'action',
-             'reaction', 'ctype')
+             'reaction')
      
 def singleton(cls):
     instances = {}

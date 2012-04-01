@@ -8,7 +8,8 @@ from Card import Card, singleton
 @singleton
 class Adventurer(Card):
     def __init__():
-        Card.__init__(self, name='Adventurer', cost=6, act=adventure)
+        super(Card, self).__init__(self, name='Adventurer', cost=6,
+                act=adventure, ctype='a')
 
 def adventure(gameState):
     currentCards = gameState.pcards[gameState.turn]

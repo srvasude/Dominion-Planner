@@ -1,4 +1,4 @@
-import Card.py
+from Card import Card, singleton
 '''
     Treasure Card:
         +1 Coin
@@ -6,4 +6,4 @@ import Card.py
 @singleton
 class Copper(Card):
     def __init__(self):
-        super(Copper, name='Copper', cost=0, coins=1).__init__()
+        super(Copper, self).__init__(name='Copper', coins=1)
