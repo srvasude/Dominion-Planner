@@ -17,7 +17,9 @@ class PlayerCards(Object):
         self.discardcurrInPlay()
         self.discardHand()
         self.draw(5)
-
+    '''
+        This method puts the discard pile as the deck
+    '''
     def discardToDeck(self):
         self.deck += self.discard
         self.discard = CardCounts()
