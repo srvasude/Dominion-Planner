@@ -1,4 +1,18 @@
+from Card import Card, singleton
+import InputSet
 '''
     Action Card:
         Gain a card costing up to 4 coins
 '''
+@singleton
+class Workshop(Card):
+    def __init__():
+        super(Card, self).__init__(name="Workshop", cost="3", action=work)
+
+def work(gameState):
+    currentPlayer = gameState.players[gameState.turn]
+    result = currentPlayer.selectInput(InputSet.stackCardSet(gameState, 
+        costs=[4], gameState)
+    gameState.stacks[result] -= 1
+    gameState.pcards[gameState.turn].gain(result)
+    

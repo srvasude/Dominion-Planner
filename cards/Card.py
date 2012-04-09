@@ -1,12 +1,12 @@
 class Card(Object):
     def __init__(self, name='None', cost=0, coins=0, victoryPoints=0,
             action = None, reaction = None, ctype=None):
-        super(Card, self).__setattr__('name', name)
-        super(Card, self).__setattr__('cost', cost)
-        super(Card, self).__setattr__('coins', coins)
-        super(Card, self).__setattr__('victoryPoints', victoryPoints)
-        super(Card, self).__setattr__('action', action)
-        super(Card, self).__setattr__('reaction', reaction)
+        super(Object, self).__setattr__('name', name)
+        super(Object, self).__setattr__('cost', cost)
+        super(Object, self).__setattr__('coins', coins)
+        super(Object, self).__setattr__('victoryPoints', victoryPoints)
+        super(Object, self).__setattr__('action', action)
+        super(Object, self).__setattr__('reaction', reaction)
      def __hash__(self):
          hsh = sum(hash(self.__getattr__(k)) for k in __slots__)
          return hsh

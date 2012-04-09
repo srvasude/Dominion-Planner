@@ -24,6 +24,13 @@ class PlayerCards(Object):
         self.deck += self.discard
         self.discard = CardCounts()
     '''
+        This method puts the deck into the discard pile
+    '''
+    def deckToDiscard(self):
+        self.discard += self.deck
+        self.deck = CardCounts()
+ 
+    '''
         This method discards the currently in play cards into the 
         discard pile
     '''
@@ -77,6 +84,11 @@ class PlayerCards(Object):
         self.discard += tempCards
         self.hand += tempHand
 
+    '''
+        This method allows a person to gain a card
+    '''
+    def gain(card):
+        self.discard[card] += 1
     '''
         This method draws N cards from the deck. If there are no more   
         cards during the drawing, the discard pile is shuffled and made

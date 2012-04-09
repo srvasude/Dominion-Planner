@@ -14,5 +14,14 @@ class Mine(Card):
 
 def mine(gameState):
     currentPlayer = gameState.players[gameState.turn]
-    minedCard = currentPlayer.selectInput(InputSets.
-    gameState.currentPlayer
+    minedCard = currentPlayer.selectInput(
+            InputSets.handCardSet(gameState, 1, 
+                filtered=(lambda x: x.coins > 0)), gameState)
+    costs = [minedCard.cost + i for i in xrange(4)]
+    gameState.trash[minedCard] += 1
+    gameState.pcards[gameState.turn][minedCard] -= 1
+    newCard = currentPlayer.selectInput(
+            InputSets.stackCardSet(gameState, 1, costs=costs,
+                filtered=(lambda x: x.coins > 0)), gameState)
+    gameState.stacks[newCard] -= 1
+    gameState.pcards[gameState.turn][newCard] += 1
