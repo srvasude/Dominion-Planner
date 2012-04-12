@@ -10,4 +10,17 @@ class Player:
     
     def valueCard(self, gameState, card):
         return NotImplemented()
-    
+
+    def availableActions(self, gameState):
+        actions = []
+        hand = gameState.pcards[gameState.turn].hand
+        for card in hand:
+            if card.action:
+                actions.append(card)
+        return actions
+
+    def totalTreasure(self, gameState):
+        total = 0
+        for card in hand:
+            total += card.coins
+        return total
