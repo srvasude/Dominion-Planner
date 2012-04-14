@@ -14,6 +14,8 @@ class Player:
     def availableActions(self, gameState):
         actions = []
         hand = gameState.pcards[gameState.turn].hand
+        if not gameState.abcs[gameState.turn]['actions']:
+            return actions
         for card in hand:
             if card.action:
                 actions.append(card)
