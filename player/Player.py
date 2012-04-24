@@ -7,6 +7,11 @@ class Player:
     
     def playBuyPhase(self, gameState):
         return NotImplemented()
+        
+    def playDiscardPhase(self, gameState):
+        gs = gameState.clone()
+        gs.pcards[gs.turn % len(gs.players)].discardPhase()
+        return gs
     
     def valueCard(self, gameState, card):
         return NotImplemented()

@@ -23,4 +23,5 @@ class GameState:
         state.trash = self.trash
         return state
     
-    
+    def getCurrentPlayer(self):
+        return self.players[self.turn % len(self.players)]
