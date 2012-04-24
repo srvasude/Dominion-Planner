@@ -96,14 +96,17 @@ class PlayerCards(Object):
         then the drawing is done since there are no more cards to draw
     '''
     def draw(self, N):
-        for i in xrange(N):
-            if not self.deck:
-                #In the case that there are no more cards to draw
-                if not self.discard:
-                    return
-                else:
-                    self.discardToDeck()
-            #Choose a random card from the deck
-            card = random.choice(self.deck.keys())
+        drawDeck = reduce(list.__add__, [[c]*d[c] for c in self.deck])
+        drawCards = random.sample(drawDeck, min(self.deck.count, N))
+        N -= self.deck.count
+        
+        #In the case that there are no more cards to draw
+        if (N > 0):
+            discardDeck = reduce(list.__add__, [[c]*d[c] for c in self.discard])
+            drawCards += random.sample(discardDeck, min(self.discard.count, N))
+            self.discardToDeck()
+        
+        for card in drawCards:
             self.hand[card] += 1
             self.deck[card] -= 1
+
