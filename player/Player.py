@@ -9,9 +9,7 @@ class Player:
         return NotImplemented()
         
     def playDiscardPhase(self, gameState):
-        gs = gameState.clone()
-        gs.pcards[gs.turn % len(gs.players)].discardPhase()
-        return gs
+        return NotImplemented()
     
     def valueCard(self, gameState, card):
         return NotImplemented()
