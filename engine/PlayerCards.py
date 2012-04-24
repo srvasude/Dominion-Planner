@@ -49,8 +49,9 @@ class PlayerCards(Object):
     '''
     def discardFromHand(self,*args):
         for card in args:
-            self.discard[card] += 1
-            self.hand[card] -= 1
+            if (self.hand[card] > 0):
+                self.discard[card] += 1
+                self.hand[card] -= 1
     '''
         This method trashes from hand several cards passed in
         as arguments. Another class should keep track of trashed
