@@ -11,8 +11,7 @@ class Simple_Player(Player):
         m = -1
         choice = None
         for i in inputs:
-            temp = (evaluate(actionSimulator(gs, i)) +
-                    evaluate(actionSimulator(gs, i))) / 2.0
+            temp = (evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
             if temp > m:
                 m = temp
                 choice = i
