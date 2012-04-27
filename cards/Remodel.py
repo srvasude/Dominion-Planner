@@ -11,6 +11,7 @@ class Remodel(Card):
         super(Card, self).__init__(name="Remodel", cost="4", action=remod)
 
 def remod(gameState):
+    gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     result = currentPlayer.selectInput(InputSet.handCardSet(gameState, 1),
             gameState)
@@ -21,3 +22,4 @@ def remod(gameState):
     result = currentPlayer.selectInput(InputSet.stackCardSet(gameState, costs=costs), gameState)
     gameState.stacks[result] -= 1
     cards.gain(result)
+    return gameState

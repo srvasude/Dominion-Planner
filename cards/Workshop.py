@@ -10,9 +10,11 @@ class Workshop(Card):
         super(Card, self).__init__(name="Workshop", cost="3", action=work)
 
 def work(gameState):
+    gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     result = currentPlayer.selectInput(InputSet.stackCardSet(gameState, 
         costs=[4], gameState)
     gameState.stacks[result] -= 1
     gameState.pcards[gameState.turn].gain(result)
+    return gameState
     

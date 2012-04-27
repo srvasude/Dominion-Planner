@@ -11,7 +11,9 @@ class Festival(Card):
         super(Card, self).__init__(name='Festival', cost=5, action=fest)
 
 def fest(gameState):
+    gameState = gameState.clone()
     abc = gameState.abcs[gameState.turn]
     abc['actions'] += 2
     abc['coins'] += 2
     abc['buys'] += 1
+    return gameState
