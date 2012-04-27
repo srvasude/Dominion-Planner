@@ -7,7 +7,7 @@ from Card import Card, singleton
 @singleton
 class Cellar(Card):
     def __init__():
-        super(Card, self).__init__(name="Cellar", cost=3, action=cellar)
+        Card.__init__(self,name="Cellar", cost=3, action=cellar)
 def cellar(gameState):
 
     

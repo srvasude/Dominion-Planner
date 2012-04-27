@@ -42,11 +42,11 @@ def play(cards, initialDeck, players):
     
         
 def main():
-    players = [Simple_Player(), Simple_Player()]
+    players = [Simple_Player(), Human_Player()]
     chosenCards = random.sample(
         [Chancellor.Chancellor(), Council_room.Council_room(),
          Feast.Feast(), Festival.Festival(), Laboratory.Laboratory(), 
-         Market.Market(), Mine.Mine(), Moneylender. Moneylender(), 
+         Market.Market(), Mine.Mine(), Moneylender.Moneylender(), 
          Remodel.Remodel(), Smithy.Smithy(), Throne_room.Throne_room(), 
          Village.Village(), Woodcutter.Woodcutter(), Workshop.Workshop()]
         , 10)
