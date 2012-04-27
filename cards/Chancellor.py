@@ -1,5 +1,5 @@
 from Card import Card, singleton
-from ..engine.InputSets import InputSets
+from engine.InputSets import InputSets
 '''
     Action Card:
         +2 Coins
@@ -7,9 +7,8 @@ from ..engine.InputSets import InputSets
 '''
 @singleton
 class Chancellor(Card):
-    def __init__():
-        super(Card, self).__init__(name'Chancellor', cost=3, 
-                action=gainDiscard)
+    def __init__(self):
+        Card.__init__(self, name='Chancellor', cost=3, action=gainDiscard)
 
 def gainDiscard(gameState):
     gameState = gameState.clone()

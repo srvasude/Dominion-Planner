@@ -9,7 +9,7 @@ from Card import Card, singleton
 @singleton
 class Market(Card):
     def __init__(self):
-        super(Card, self).__init__(name='Market', cost=5, action=market)
+        Card.__init__(self, name='Market', cost=5, action=market)
 
 def market(gameState):
     gameState = gameState.clone()

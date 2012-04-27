@@ -6,4 +6,4 @@ from Card import Card, singleton
 @singleton
 class Silver(Card):
     def __init__(self):
-        super(Silver, self).__init__(name='Silver', cost=3, coins=2)
+        Card.__init__(self, name='Silver', cost=3, coins=2)

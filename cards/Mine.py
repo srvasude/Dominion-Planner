@@ -1,5 +1,5 @@
 from Card import Card, singleton
-from ..engine.InputSets import InputSets
+from engine.InputSets import InputSets
 '''
     Action Card:
         Trash a Treasure card from your hand. Gain a Treasure card costing
@@ -11,7 +11,7 @@ state.players, state.pcards, state.turn, state.stacks
 @singleton
 class Mine(Card):
     def __init__(self):
-        super(Mine, self).__init__(name='Mine', cost=5, action=mine)
+        Card.__init__(self, name='Mine', cost=5, action=mine)
 
 def mine(gameState):
     gameState = gameState.clone()

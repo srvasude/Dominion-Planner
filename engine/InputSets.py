@@ -16,12 +16,13 @@ class InputSets:
         hand = gameState.pcards[gameState.turn].hand;
         if filtered:
             hand = CardCounts({k : v for k in hand if filtered(k)})
-        handCards = itertools.chain.from_iterable
-                        ((itertools.repeat(c, hand.cards[c]) for c in hand.cards))
+        handCards = itertools.chain.from_iterable(
+                (itertools.repeat(c, hand.cards[c]) for c in hand.cards))
         
         if number == 'ALL':
-            return itertools.chain.from_iterable
-                        ([itertools.combinations(handCards, i) for i in range(hand.size + 1)])
+            return itertools.chain.from_iterable(
+                    [itertools.combinations(handCards, i) 
+                    for i in range(hand.size + 1)])
         else:
             return itertools.combinations(handCards, number)
     

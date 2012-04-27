@@ -6,9 +6,9 @@ from Card import Card, singleton
         Each other player draws a card.
 '''
 @singleton
-class CouncilRoom(Card):
-    def __init__():
-        super(Card, self).__init__(name='CouncilRoom', cost=5, 
+class Council_room(Card):
+    def __init__(self):
+        Card.__init__(self, name='CouncilRoom', cost=5, 
                 action=drawCards)
 
 def drawCards(gameState):

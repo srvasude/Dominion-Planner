@@ -1,14 +1,14 @@
 from Card import Card, singleton
 from Copper import Copper
-from ..engine.InputSets import InputSets
+from engine.InputSets import InputSets
 '''
     Action Card:
         Trash a Copper from your hand. If you do, +3 coins.
 '''
 @singleton
 class Moneylender(Card):
-    def __init__():
-        super(Card, self).__init__(name="Moneylender", cost="4", action=lend)
+    def __init__(self):
+        Card.__init__(self, name="Moneylender", cost="4", action=lend)
 
 def lend(gameState):
     gameState = gameState.clone()

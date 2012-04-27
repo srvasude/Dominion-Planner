@@ -6,8 +6,8 @@ from Card import Card, singleton
 '''
 @singleton
 class Woodcutter(Card):
-    def __init__():
-        super(Card, self).__init__(name='Woodcutter', cost=3, 
+    def __init__(self):
+        Card.__init__(self, name='Woodcutter', cost=3, 
                 action=cutwood)
 
 def cutwood(gameState):

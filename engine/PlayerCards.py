@@ -1,4 +1,5 @@
 import random
+from ..util.Functions import CardCounts
 class PlayerCards(Object):
     '''
         A deck is a tuple/list of a CardCounts of cards, number of cards. The discard, hand and 

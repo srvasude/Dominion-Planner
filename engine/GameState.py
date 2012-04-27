@@ -1,4 +1,8 @@
-import ..util.Functions.py
+import sys 
+import os.path 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 
+    os.path.pardir)))
+from util.Functions import CardCounts
 class GameState:
     @staticmethod
     def setup(cards, initialDeck, players):

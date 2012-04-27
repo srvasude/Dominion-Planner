@@ -1,5 +1,5 @@
 from Card import Card, singleton
-from ..engine.InputSets import InputSets
+from engine.InputSets import InputSets
 '''
     Action Card:
         Trash a card from your hand. Gain a card costing up to 2 coins more
@@ -7,8 +7,8 @@ from ..engine.InputSets import InputSets
 '''
 @singleton
 class Remodel(Card):
-    def __init__():
-        super(Card, self).__init__(name="Remodel", cost="4", action=remod)
+    def __init__(self):
+        Card.__init__(self, name="Remodel", cost="4", action=remod)
 
 def remod(gameState):
     gameState = gameState.clone()

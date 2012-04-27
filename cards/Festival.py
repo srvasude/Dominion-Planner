@@ -8,7 +8,7 @@ from Card import Card, singleton
 @singleton
 class Festival(Card):
     def __init__(self):
-        super(Card, self).__init__(name='Festival', cost=5, action=fest)
+        Card.__init__(self, name='Festival', cost=5, action=fest)
 
 def fest(gameState):
     gameState = gameState.clone()

@@ -6,7 +6,7 @@ from Card import Card, singleton
 @singleton
 class Smithy(Card):
     def __init__(self):
-        super(Card, self).__init__(name='Smithy', cost=4, action=smith)
+        Card.__init__(self, name='Smithy', cost=4, action=smith)
 
 def smith(gameState):
     gameState = gameState.clone()

@@ -7,7 +7,7 @@ from Card import Card, singleton
 @singleton
 class Village(Card):
     def __init__(self):
-        super(Card, self).__init__(name='Village', cost=3, action=village)
+        Card.__init__(self, name='Village', cost=3, action=village)
 
 def village(gameState):
     gameState = gameState.clone()

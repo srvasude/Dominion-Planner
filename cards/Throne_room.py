@@ -1,13 +1,13 @@
 from Card import Card, singleton
-from ..engine.InputSets import InputSets
+from engine.InputSets import InputSets
 '''
     Action Card:
         Choose any Action card in your hand. Play it twice.
 '''
 @singleton
-class ThroneRoom(Card):
+class Throne_room(Card):
     def __init__(self):
-        super(Card, self).__init__(name='ThroneRoom', cost=4, action=dbl)
+        Card.__init__(self, name='ThroneRoom', cost=4, action=dbl)
 
 def dbl(gameState):
     gameState = gameState.clone()

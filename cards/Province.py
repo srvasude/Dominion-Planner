@@ -6,5 +6,4 @@ from Card import Card, singleton
 @singleton
 class Province(Card):
     def __init__(self):
-        super(Province, self).__init__(name='Province', cost=8, 
-                victoryPoints=6)
+        Card.__init__(self, name='Province', cost=8, victoryPoints=6)
