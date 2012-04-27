@@ -1,6 +1,6 @@
 from Card import Card, singleton
 from Copper import Copper
-import InputSet
+from ..engine.InputSets import InputSets
 '''
     Action Card:
         Trash a Copper from your hand. If you do, +3 coins.
@@ -14,7 +14,7 @@ def lend(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     if gameState.pcards[gameState.turn][Copper()] > 0:
-        result = currentPlayer.selectInput(InputSet.tf(), gameState,
+        result = currentPlayer.selectInput(InputSets.tf(), gameState,
                 helpMessage='Do you want to trash a copper?')
         if result:
             gameState.pcards[gameState.turn][Copper()] -= 1

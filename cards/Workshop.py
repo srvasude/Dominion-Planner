@@ -1,5 +1,5 @@
 from Card import Card, singleton
-import InputSet
+from ..engine.InputSets import InputSets
 '''
     Action Card:
         Gain a card costing up to 4 coins
@@ -12,7 +12,7 @@ class Workshop(Card):
 def work(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
-    result = currentPlayer.selectInput(InputSet.stackCardSet(gameState, 
+    result = currentPlayer.selectInput(InputSets.stackCardSet(gameState, 
         costs=[4], gameState)
     gameState.stacks[result] -= 1
     gameState.pcards[gameState.turn].gain(result)

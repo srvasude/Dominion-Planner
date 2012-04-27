@@ -1,4 +1,5 @@
 from Card import Card, singleton
+from ..engine.InputSets import InputSets
 '''
     Action Card:
         Trash a Treasure card from your hand. Gain a Treasure card costing

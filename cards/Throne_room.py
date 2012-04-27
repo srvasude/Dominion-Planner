@@ -1,4 +1,5 @@
 from Card import Card, singleton
+from ..engine.InputSets import InputSets
 '''
     Action Card:
         Choose any Action card in your hand. Play it twice.

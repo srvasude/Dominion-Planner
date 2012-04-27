@@ -1,5 +1,5 @@
 from Card import Card, singleton
-import InputSet
+from ..engine.InputSets import InputSets
 '''
     Action Card:
         Trash a card from your hand. Gain a card costing up to 2 coins more
@@ -13,7 +13,7 @@ class Remodel(Card):
 def remod(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
-    result = currentPlayer.selectInput(InputSet.handCardSet(gameState, 1),
+    result = currentPlayer.selectInput(InputSets.handCardSet(gameState, 1),
             gameState, helpMessage='Choose a card to trash')
     cards = gameState.pcard[gameState.turn]
     cards.hand[result] -= 1

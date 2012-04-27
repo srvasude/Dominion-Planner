@@ -1,5 +1,5 @@
 from Card import Card, singleton
-import InputSet
+from ..engine.InputSet import InputSet
 '''
     Action Card:
         Trash this card. Gain a card costing up to 5 coins.
@@ -12,7 +12,7 @@ class Feast(Card):
 def gainCard(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
-    result = currentPlayer.selectInput(InputSet.stackCardSet(gameState,
+    result = currentPlayer.selectInput(InputSets.stackCardSet(gameState,
         costs=xrange(5)), gameState)
     gameState.trash[self] += 1
     gameState.pcards[gameState.turn].hand[self] -= 1

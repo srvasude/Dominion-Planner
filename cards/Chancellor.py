@@ -1,4 +1,5 @@
 from Card import Card, singleton
+from ..engine.InputSets import InputSets
 '''
     Action Card:
         +2 Coins
