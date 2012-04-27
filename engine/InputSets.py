@@ -1,5 +1,5 @@
 import itertools
-
+from util.Functions import CardCounts
 class InputSets(object):
     '''
         Return True, False choices
