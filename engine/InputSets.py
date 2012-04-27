@@ -28,10 +28,11 @@ class InputSets:
     @staticmethod
     def stackCardSet(gameState, number=1, costs=[], filtered=None):
         stacks = gameState.stacks.keys()
+        stackNums = gameState.stacks
         if filtered:
             stacks = {k for k in stacks if filtered(k)}
         if costs == []:
-            costs = {c.cost for c in stacks))
-        stacks = filter(lambda c: c.cost in costs, stacks)
+            costs = {c.cost for c in stacks}
+        stacks = filter(lambda c: c.cost in costs and stackNums[c] > 0, stacks)
         return itertools.combinations(stacks, number)
         

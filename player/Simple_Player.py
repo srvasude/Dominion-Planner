@@ -3,13 +3,14 @@ class SimplePlayer(Player):
         return  gameState.abcs[gameState.turn]['actions'] +
                 gameState.abcs[gameState.turn]['buys'] +
                 gameState.abcs[gameState.turn]['coins'] +
-                totalTreasure(self, gameState)
+                totalTreasure(gameState)
                 
     def selectInput(self, inputs, gameState, actionSimulator=None):
         m = -1
         choice = None
         for i in inputs:
-            temp = (evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
+            temp = (evaluate(actionSimulator(gs, i)) +
+                    evaluate(actionSimulator(gs, i))) / 2.0
             if temp > m:
                 m = temp
                 choice = i
@@ -17,7 +18,7 @@ class SimplePlayer(Player):
     
     def playActionPhase(self, gameState):
         gameState = gameState.clone()
-        actions = availableActions(self, gameState)
+        actions = self.availableActions(gameState)
         while len(actions) > 0:
             choice = None
             v = evaluate(gameState)
@@ -32,20 +33,20 @@ class SimplePlayer(Player):
                 gameState.pcards[gameState.turn].discardFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = choice.action(gameState)
-                actions = availableActions(self, gameState)
+                actions = self.availableActions(gameState)
         return gameState
     
     def playBuyPhase(self, gameState):
         gameState = gameState.clone()
         buys = gameState.abcs[gameState.turn]['buys']
-        coins = gameState.abcs[gameState.turn]['coins'] + totalTreasure(self, gameState)
+        coins = gameState.abcs[gameState.turn]['coins'] + totalTreasure(gameState)
         while buys > 0:
             m = -1
             buy = None
-            possibleBuys = [c for c in gameState.stacks if gameState.stacks[c] > 0 && c.cost <= coins]
+            possibleBuys = self.availableBuys(gameState, coins)
             for c in possibleBuys:
-                if valueCard(self, gameState, c) > m:
-                    m = valueCard(self, gameState, c)
+                if self.valueCard(gameState, c) > m:
+                    m = self.valueCard(gameState, c)
                     buy = c
             if choice == None:
                 break

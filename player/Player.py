@@ -17,9 +17,15 @@ class Player:
     def availableActions(self, gameState):
         if not gameState.abcs[gameState.turn]['actions']:
             return []
-        return InputSets.handCardSet(gameState, 1, labmda c: (c.action != None))
+        return InputSets.handCardSet(gameState, number=1, 
+            lambda c: (c.action != None))
 
-    def totalTreasure(self, gameState):
+    def availableBuys(self, gameState, money):
+        if not gameState.abcs[gameState.turn]['buys']:
+            return []
+        return InputSet.stackCardSet(gameState, number=1, 
+            costs=range(money+1))
+    def totalTreasure(gameState):
         hand = gameState.pcards[gameState.turn].hand
         total = 0
         for card in hand:
