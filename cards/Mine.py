@@ -20,12 +20,20 @@ def mine(gameState):
             InputSets.handCardSet(gameState, 1, 
             filtered=(lambda x: x.coins > 0)), gameState,
             helpMessage = 'Which Treasure do you choose to Trash?')
+    if minedCard == None:
+        return gameState
+    else:
+        minedCard = minedCard[0]
     costs = [minedCard.cost + i for i in xrange(4)]
     gameState.trash[minedCard] += 1
-    gameState.pcards[gameState.turn][minedCard] -= 1
+    gameState.pcards[gameState.turn].hand[minedCard] -= 1
     newCard = currentPlayer.selectInput(
             InputSets.stackCardSet(gameState, 1, costs=costs,
                 filtered=(lambda x: x.coins > 0)), gameState)
+    if newCard == None:
+        return gameState
+    else:
+        newCard = newCard[0]
     gameState.stacks[newCard] -= 1
-    gameState.pcards[gameState.turn][newCard] += 1
+    gameState.pcards[gameState.turn].hand[newCard] += 1
     return gameState

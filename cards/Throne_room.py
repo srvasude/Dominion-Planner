@@ -12,8 +12,13 @@ class Throne_room(Card):
 def dbl(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
-    result = currentPlayer.selectInput(InputSets.handCardSet(gameState, 1),
+    result = currentPlayer.selectInput(InputSets.handCardSet(gameState, 1, filtered = lambda c: (c.action != None)),
             gameState, helpMessage='Choose which card to play twice')
-    result.action(gameState)
-    result.action(gameState)
+    if result == None:
+        return gameState
+    else:
+        result = result[0]
+    gameState.pcards[gameState.turn].discardFromHand(result)
+    gameState = result.action(gameState)
+    gameState = result.action(gameState)
     return gameState

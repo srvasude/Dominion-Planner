@@ -6,4 +6,4 @@ from Card import Card, singleton
 @singleton
 class Gold(Card):
     def __init__(self):
-        Card.__init__(self, name='Gold', cost='6', coins='3')
+        Card.__init__(self, name='Gold', cost=6, coins=3)
