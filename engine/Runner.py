@@ -12,10 +12,8 @@ def play(cards, initialDeck, players):
 
 players = []
 chosenCards = random.sample(
-    [Adventurer(), Bureaucrat(), Cellar(), Chancellor(), Chapel(), Council_room(),
-     Feast(), Festival(), Gardens(), Laboratory(), Library(), Market(), Militia(),
-     Mine(), Moat(), Moneylender(), Remodel(), Smithy(), Spy(), Thief(), Throne_room,
-     Village(), Witch(), Woodcutter(), Workshop()]
+    [Workshop(), Woodcutter(), Village(), Throne_room(), Smithy(), Remodel(), Moneylender(),
+     Mine(), Market(), Laboratory(), Festival(), Feast(), Council_room(), Copper(), Chancellor()]
     , 10)
 stacks = CardCounts(zip(chosenCards, [10] * len(chosenCards)))
 stacks[Copper()] = 60 - 7 * len(players)
