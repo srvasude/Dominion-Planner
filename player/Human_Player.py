@@ -19,12 +19,9 @@ def print_fancy_state(gameState, messg=None):
 def print_discard(gameState):
     for card in gameState.pcards[gameState.turn].discard:
         print card.name + ': ' + str(gameState.pcards[gameState.turn].discard[card])
-def _iterateAndAsk(lst, noop=False, cards=False):
+def _iterateAndAsk(lst, noop=False):
     for item in enumerate(lst):
-        if cards:
-            print str(item[0]) + ' ' + item[1].name + ': ' + str(item[1].cost)
-        else:
-            print str(item)
+        print str(item[0]) + ': ' + str(item[1])
     option = None
     if noop:
         option = raw_input(_magicString+_noop+':')
@@ -53,7 +50,8 @@ class Human_Player(Player):
         gameState = gameState.clone()
         cards = self.availableActions(gameState)
         while cards:
-            option = _iterateAndAsk(cards, True, True)
+            card_names = [card.name for card in cards]
+            option = _iterateAndAsk(card_names, True)
             if option == '-1' or option == '':
                 break
             elif option == 'p':
@@ -72,11 +70,11 @@ class Human_Player(Player):
         gameState = gameState.clone()
         pcards = gameState.pcards[gameState.turn]
         abcs = gameState.abcs[gameState.turn]
-        buys = gameState.abcs[gameState.turn]['buys']
-        coins = gameState.abcs[gameState.turn]['coins'] + self.totalTreasure(gameState)
-        while buys > 0:
-            possibleBuys = self.availableBuys(gameState, coins)
-            option = _iterateAndAsk(possibleBuys, True, True)
+        abcs['coins'] += self.totalTreasure(gameState)
+        while abcs['buys'] > 0:
+            possibleBuys = self.availableBuys(gameState, abcs['coins'])
+            buy_names = [card.name +': '+str(card.cost)+': '+str(gameState.stacks[card])+' remaining.' for card in possibleBuys]
+            option = _iterateAndAsk(buy_names, True)
             if option == '-1' or option == '':
                 break
             elif option == 'p':
@@ -86,11 +84,9 @@ class Human_Player(Player):
             else:
                 i = int(option)
                 gameState.stacks[possibleBuys[i]] -= 1
-                buys -= 1
-                coins -= possibleBuys[i].cost
+                abcs['buys'] -= 1
+                abcs['coins'] -= possibleBuys[i].cost
                 pcards.gain(possibleBuys[i])
-        gameState.abcs[gameState.turn]['buys'] = buys
-        gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
 
     def playDiscardPhase(self, gameState):
