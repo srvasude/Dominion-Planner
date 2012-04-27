@@ -15,13 +15,12 @@ class Player:
         return NotImplemented()
 
     def availableActions(self, gameState):
-        hand = gameState.pcards[gameState.turn].hand
         if not gameState.abcs[gameState.turn]['actions']:
             return []
-        return filter((lambda x : return x.action != None),
-                (for card in hand))
+        return InputSets.handCardSet(gameState, 1, labmda c: (c.action != None))
 
     def totalTreasure(self, gameState):
+        hand = gameState.pcards[gameState.turn].hand
         total = 0
         for card in hand:
             total += card.coins
