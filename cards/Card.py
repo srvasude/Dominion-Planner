@@ -1,4 +1,4 @@
-class Card(Object):
+class Card(object):
     def __init__(self, name='None', cost=0, coins=0, victoryPoints=0,
             action = None, reaction = None, ctype=None):
         super(Object, self).__setattr__('name', name)
