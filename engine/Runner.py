@@ -22,7 +22,7 @@ def play(cards, initialDeck, players):
         gs.turn = (gs.turn + 1) % numPlayers
         numDepleted = len(filter(lambda c: gs.stacks[c] == 0, cards))
 def main():
-    players = [Simple_Player(), Human_Player() ]
+    players = [Simple_Player()]
     chosenCards = random.sample(
         [Chancellor.Chancellor(), Council_room.Council_room(),
          Feast.Feast(), Festival.Festival(), Laboratory.Laboratory(), 

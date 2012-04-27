@@ -20,11 +20,11 @@ class GameState(object):
     
     def clone(self):
         state = GameState()
-        state.players = self.players
-        state.pcards = self.pcards
-        state.abcs = self.abcs
-        state.stacks = self.stacks
+        state.players = list(self.players)
+        state.pcards = [pcard.copy() for pcard in self.pcards]
+        state.abcs = [abc.copy() for abc in self.abcs]
+        state.stacks = self.stacks.copy()
         state.turn = self.turn
-        state.trash = self.trash
+        state.trash = self.trash.copy()
         return state
 

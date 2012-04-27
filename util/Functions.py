@@ -40,7 +40,9 @@ class CardCounts(dict):
         self.count /= divisor
 
     def copy(self):
-        return CardCounts(dict.copy(self))
+        state = CardCounts(dict.copy(self))
+        state.count = self.count
+        return state
 
     def __mul__(self, y ):
         sum = 0
@@ -53,11 +55,6 @@ class CardCounts(dict):
             sum += x[key] * y[key]
         return sum
 
-    def __radd__(self, y):
-        for key, value in y.items():
-            self[key] += value
-            self.count += value
-
     def __add__( self, y ):
         addend = CardCounts()
         for key in self:
@@ -65,12 +62,10 @@ class CardCounts(dict):
                 addend[key] = self[key] + y[key]
             else:
                 addend[key] = self[key]
-            addend.count += addend[key]
         for key in y:
             if key in self:
                 continue
             addend[key] = y[key]
-            addend.count += addend[key]
         return addend
 
     def decKey(self, key, num=1):

@@ -17,6 +17,13 @@ class PlayerCards(object):
         self.currInPlay = CardCounts(currInPlay)
 
     '''
+        This method returns a copy of self
+    '''
+    def copy(self):
+        return PlayerCards(deck=self.deck.copy(), discard=self.discard.copy(),
+            hand=self.hand.copy(), currInPlay=self.currInPlay.copy())
+    
+    '''
         This method simulates the discard phase of the game.
     '''
     def discardPhase(self):
@@ -120,4 +127,3 @@ class PlayerCards(object):
         for card in drawCards:
             self.hand[card] += 1
             self.deck[card] -= 1
-
