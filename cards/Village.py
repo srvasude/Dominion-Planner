@@ -10,5 +10,7 @@ class Village(Card):
         super(Card, self).__init__(name='Village', cost=3, action=village)
 
 def village(gameState):
+    gameState = gameState.clone()
     gameState.pcards[gameState.turn].draw(1)
     gameState.abcs[gameState.turn]['actions'] += 2
+    return gameState

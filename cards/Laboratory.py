@@ -9,6 +9,7 @@ class Laboratory(Card):
     def __init__(self):
         super(Card, self).__init__(name='Laboratory', cost=5, action=lab)
 def lab(gameState):
+    gameState = gameState.clone()
     gameState.pcards[gameState.turn].draw(2)
     gameState.abcs[gameState.turn]['actions'] += 1
-
+    return gameState

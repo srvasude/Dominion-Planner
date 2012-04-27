@@ -11,6 +11,8 @@ class Woodcutter(Card):
                 action=cutwood)
 
 def cutwood(gameState):
+    gameState = gameState.clone()
     abc = gameState.abcs[gameState.turn]
     abc['buys'] += 1
     abc['coins'] += 2
+    return gameState

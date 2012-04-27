@@ -13,6 +13,7 @@ class Mine(Card):
         super(Mine, self).__init__(name='Mine', cost=5, action=mine)
 
 def mine(gameState):
+    gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     minedCard = currentPlayer.selectInput(
             InputSets.handCardSet(gameState, 1, 
@@ -25,3 +26,4 @@ def mine(gameState):
                 filtered=(lambda x: x.coins > 0)), gameState)
     gameState.stacks[newCard] -= 1
     gameState.pcards[gameState.turn][newCard] += 1
+    return gameState

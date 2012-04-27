@@ -9,4 +9,6 @@ class Smithy(Card):
         super(Card, self).__init__(name='Smithy', cost=4, action=smith)
 
 def smith(gameState):
+    gameState = gameState.clone()
     gameState.pcards[gameState.turn].draw(3)
+    return gameState

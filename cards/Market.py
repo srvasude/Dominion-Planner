@@ -12,7 +12,9 @@ class Market(Card):
         super(Card, self).__init__(name='Market', cost=5, action=market)
 
 def market(gameState):
+    gameState = gameState.clone()
     gameState.pcards[gameState.turn].draw(1)
     abc = gameState.abcs[gameState.turn]
     for key in abc:
         abc[key] += 1
+    return gameState
