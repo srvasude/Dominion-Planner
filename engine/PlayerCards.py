@@ -9,7 +9,8 @@ class PlayerCards(object):
         A deck is a tuple/list of a CardCounts of cards, number of cards. The discard, hand and 
         currentlyInPlay also share a similar structure
     '''
-    def __init__(self, deck=None, discard=None, hand=None, currInPlay=None):
+    def __init__(self, deck=CardCounts(), 
+            discard=CardCounts(), hand=CardCounts(), currInPlay=CardCounts()):
         self.deck = deck
         self.discard = discard
         self.hand = hand
@@ -102,15 +103,17 @@ class PlayerCards(object):
         then the drawing is done since there are no more cards to draw
     '''
     def draw(self, N):
-        drawDeck = reduce(list.__add__, [[c]*d[c] for c in self.deck])
+        drawDeck = reduce(list.__add__, [[c]*self.deck[c] for c in self.deck])
         drawCards = random.sample(drawDeck, min(self.deck.count, N))
         N -= self.deck.count
         
         #In the case that there are no more cards to draw
         if (N > 0):
-            discardDeck = reduce(list.__add__, [[c]*d[c] for c in self.discard])
-            drawCards += random.sample(discardDeck, min(self.discard.count, N))
-            self.discardToDeck()
+            if self.discard:
+                discardDeck = reduce(list.__add__, 
+                    [[c]*self.deck[c] for c in self.discard])
+                drawCards += random.sample(discardDeck, min(self.discard.count, N))
+                self.discardToDeck()
         
         for card in drawCards:
             self.hand[card] += 1

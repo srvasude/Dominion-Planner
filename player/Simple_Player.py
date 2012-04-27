@@ -1,17 +1,17 @@
 from Player import Player
 class Simple_Player(Player):
-    def evaluate(gameState):
+    def evaluate(self, gameState):
         return (gameState.abcs[gameState.turn]['actions'] 
               + gameState.abcs[gameState.turn]['buys']
               + gameState.abcs[gameState.turn]['coins']
-              + totalTreasure(gameState))
+              + self.totalTreasure(gameState))
                 
     def selectInput(self, inputs, gameState, actionSimulator=None,
             helpMessage=None):
         m = -1
         choice = None
         for i in inputs:
-            temp = (evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
+            temp = (self.evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
             if temp > m:
                 m = temp
                 choice = i
@@ -22,9 +22,9 @@ class Simple_Player(Player):
         actions = self.availableActions(gameState)
         while len(actions) > 0:
             choice = None
-            v = evaluate(gameState)
+            v = self.evaluate(gameState)
             for a in actions:
-                tempv = evaluate(a.action(gs))
+                tempv = self.evaluate(a.action(gs))
                 if tempv >= v:
                     choice = a
                     v = tempv
@@ -40,7 +40,8 @@ class Simple_Player(Player):
     def playBuyPhase(self, gameState):
         gameState = gameState.clone()
         buys = gameState.abcs[gameState.turn]['buys']
-        coins = gameState.abcs[gameState.turn]['coins'] + totalTreasure(gameState)
+        coins = gameState.abcs[gameState.turn]['coins'] 
+        + self.totalTreasure(gameState)
         while buys > 0:
             m = -1
             buy = None

@@ -26,7 +26,7 @@ class Player:
             return []
         return InputSet.stackCardSet(gameState, number=1, 
             costs=range(money+1))
-    def totalTreasure(gameState):
+    def totalTreasure(self, gameState):
         hand = gameState.pcards[gameState.turn].hand
         total = 0
         for card in hand:
