@@ -1,7 +1,7 @@
 from Player import Player
 class Simple_Player(Player):
     def evaluate(self, gameState):
-        return (gameState.abcs[gameState.turn]['actions'] 
+        return (gameState.abcs[gameState.turn]['actions'] * 0
               + gameState.abcs[gameState.turn]['buys']
               + gameState.abcs[gameState.turn]['coins']
               + self.totalTreasure(gameState))
@@ -18,7 +18,6 @@ class Simple_Player(Player):
             if temp > m:
                 m = temp
                 choice = i
-        print choice, list(inputs)
         return choice
     
     def playActionPhase(self, gameState):
@@ -38,7 +37,7 @@ class Simple_Player(Player):
             if not choice:
                 break
             else:
-                print 'Play: ' + choice.name, 
+                print 'Play: ' + choice.name
                 gameState.pcards[gameState.turn].discardFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = choice.action(gameState)
