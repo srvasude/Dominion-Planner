@@ -82,12 +82,12 @@ class CardCounts(dict):
                 addend[key] = self[key] - y[key]
             else:
                 addend[key] = self[key]
-            addend.count += addend[key]
-        for key in y:
-            if key in self:
-                continue
-            addend[key] = -1 * y[key]
-            addend.count += addend[key]
         return addend
 
-
+    def __str__(self):
+        import re
+        tostr = ""
+        for key in self:
+            tostr += str(self[key]) + ' ' + key.name + ', '
+        return re.sub(', $', '', tostr)
+    

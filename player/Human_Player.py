@@ -1,7 +1,7 @@
 from Player import Player
 from sys import stdin
 _magicString = 'Choose an option, p being print statistics, d discard'
-_noop = ', with -1 being none of the above'
+_noop = ', with \'\' being none of the above'
 
 def print_fancy_state(gameState, messg=None):
     print 'It is currently your turn '+str(gameState.turn) +'.'
@@ -24,7 +24,7 @@ def _iterateAndAsk(lst, noop=False, cards=False):
         if cards:
             print str(item[0]) + ' ' + item[1].name + ': ' + str(item[1].cost)
         else:
-            print item
+            print str(item)
     option = None
     if noop:
         option = raw_input(_magicString+_noop+':')
@@ -37,7 +37,10 @@ class Human_Player(Player):
     def selectInput(self, inputs, gameState, actionSimulator=None,
             helpMessage=None):
         print helpMessage
-        option = _iterateAndAsk(inputs)
+        inputs = list(inputs)
+        if len(inputs) == 0:
+            return None
+        option = _iterateAndAsk(list(inputs))
         if option == 'p':
             print_fancy_state(gameState)
         elif option == 'd':
@@ -48,12 +51,10 @@ class Human_Player(Player):
 
     def playActionPhase(self, gameState):
         gameState = gameState.clone()
-        pcards = gameState.pcards[gameState.turn]
-        abcs = gameState.abcs[gameState.turn]
         cards = self.availableActions(gameState)
         while cards:
             option = _iterateAndAsk(cards, True, True)
-            if option == '-1':
+            if option == '-1' or option == '':
                 break
             elif option == 'p':
                 print_fancy_state(gameState,messg='It is the Action Phase')
@@ -64,7 +65,7 @@ class Human_Player(Player):
                 gameState.pcards[gameState.turn].discardFromHand(cards[i])
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = cards[i].action(gameState)
-                cards[i] = availableActions(self, gameState)
+                cards = self.availableActions(gameState)
         return gameState
 
     def playBuyPhase(self, gameState):
@@ -76,7 +77,7 @@ class Human_Player(Player):
         while buys > 0:
             possibleBuys = self.availableBuys(gameState, coins)
             option = _iterateAndAsk(possibleBuys, True, True)
-            if option == '-1':
+            if option == '-1' or option == '':
                 break
             elif option == 'p':
                 print_fancy_state(gameState,messg='It is the Buy Phase')

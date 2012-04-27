@@ -17,7 +17,7 @@ class InputSets(object):
         if filtered:
             hand = CardCounts({k : hand[k] for k in hand if filtered(k)})
         handCards = itertools.chain.from_iterable(
-                (itertools.repeat(c, hand) for c in hand))
+                (itertools.repeat(c, hand[c]) for c in hand))
         
         if number == 'ALL':
             return itertools.chain.from_iterable(

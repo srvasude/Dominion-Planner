@@ -10,11 +10,15 @@ class Simple_Player(Player):
             helpMessage=None):
         m = -1
         choice = None
+        inputs = list(inputs)
         for i in inputs:
-            temp = (self.evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
+            temp = 0
+            if actionSimulator != None:
+                temp = (self.evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
             if temp > m:
                 m = temp
                 choice = i
+        print choice, list(inputs)
         return choice
     
     def playActionPhase(self, gameState):
@@ -24,6 +28,9 @@ class Simple_Player(Player):
             choice = None
             v = self.evaluate(gameState)
             for a in actions:
+                gs = gameState.clone()
+                gs.pcards[gs.turn].discardFromHand(a)
+                gs.abcs[gs.turn]['actions'] -= 1
                 tempv = self.evaluate(a.action(gs))
                 if tempv >= v:
                     choice = a
@@ -31,6 +38,7 @@ class Simple_Player(Player):
             if not choice:
                 break
             else:
+                print 'Play: ' + choice.name, 
                 gameState.pcards[gameState.turn].discardFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = choice.action(gameState)
@@ -40,8 +48,7 @@ class Simple_Player(Player):
     def playBuyPhase(self, gameState):
         gameState = gameState.clone()
         buys = gameState.abcs[gameState.turn]['buys']
-        coins = gameState.abcs[gameState.turn]['coins'] 
-        + self.totalTreasure(gameState)
+        coins = gameState.abcs[gameState.turn]['coins'] + self.totalTreasure(gameState)
         while buys > 0:
             m = -1
             buy = None
