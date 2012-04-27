@@ -13,6 +13,7 @@ def play(cards, initialDeck, players):
     numDepleted = 0
     while (gs.stacks[Province.Province()] != 0) and numDepleted < 3:
         curPlayer = gs.players[gs.turn]
+        gs.abcs[gs.turn] = {'actions':1, 'buys':1, 'coins':0}
         gs = curPlayer.playActionPhase(gs)
         gs = curPlayer.playBuyPhase(gs)
         gs = curPlayer.playDiscardPhase(gs)
