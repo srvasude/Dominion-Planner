@@ -34,8 +34,6 @@ def main():
     stacks[Estate.Estate()] = 24 - 3 * len(players)
     stacks[Duchy.Duchy()] = 12
     stacks[Province.Province()] = 12
-
-    play(stacks, CardCounts({Copper.Copper():7, Estate.Estate():3}), players)
-
+    
 if __name__ == "__main__":
     main()

@@ -13,7 +13,7 @@ def work(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     result = currentPlayer.selectInput(InputSets.stackCardSet(gameState, 
-        costs=[4]),gameState)
+        costs=[0,1,2,3,4]), gameState)
     gameState.stacks[result] -= 1
     gameState.pcards[gameState.turn].gain(result)
     return gameState
