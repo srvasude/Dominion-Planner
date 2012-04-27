@@ -13,16 +13,25 @@ def _iterateAndAsk(lst, noop=False):
         option = raw_input(_magicString+':')
     return option
 
-
+def print_fancy_state(gameState, messg=None):
+    print 'It is currently your turn.'
+    if messg:
+        print messg
+    abcs = gameState.abcs[gameState.turn]
+    print 'You have '+ str(abcs['actions']) + ' actions' +' and ' + str(abcs['buys']) + ' buys left'
+    print 'These are the cards in your hand:'
+    pcards = gameState.pcards[gameState.turn]
+    for card in pcards.hand:
+        print card.name + ': ' + str(pcards.hand[card])
+    totCards = pcards.hand.count + pcards.discard.count + pcards.deck.count
+    print 'You have a total of ' + str(totCards) + 'cards.'
 class Human_Player(Player):
     def selectInput(self, inputs, gameState, actionSimulator=None,
             helpMessage=None):
         print helpMessage
         option = _iterateAndAsk(inputs)
         if option == 'p':
-            print gameState.abcs[gameState.turn]
-            print '\n'
-            print gameState.pcards[gameState.turn].hand
+            print_fancy_state(gameState)
         else:
             option = int(option)
             return inputs[option]
@@ -37,8 +46,7 @@ class Human_Player(Player):
             if option == '-1':
                 break
             elif option == 'p':
-                print abcs, pcards.hand
-                continue
+                print_fancy_state(gameState,messg='It is the Action Phase')
             else:
                 i = int(option)
                 gameState.pcards[gameState.turn].discardFromHand(cards[i])
@@ -59,8 +67,7 @@ class Human_Player(Player):
             if option == '-1':
                 break
             elif option == 'p':
-                print abcs, pcards.hand
-                continue
+                print_fancy_state(gameState,messg='It is the Buy Phase')
             else:
                 i = int(option)
                 gameState.stacks[possibleBuys[i]] -= 1
