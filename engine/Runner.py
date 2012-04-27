@@ -15,12 +15,12 @@ chosenCards = random.sample(
      Mine(), Moat(), Moneylender(), Remodel(), Smithy(), Spy(), Thief(), Throne_room,
      Village(), Witch(), Woodcutter(), Workshop()]
     , 10)
-stacks = CardCounts(zip(chosenCards, [15] * len(chosenCards)))
-stacks[Copper()] = 100 - 7 * len(players)
-stacks[Silver()] = 100
-stacks[Gold()] = 100
-stacks[Estate()] = 15 - 3 * len(players)
-stacks[Duchy()] = 15
-stacks[Province()] = 15
+stacks = CardCounts(zip(chosenCards, [10] * len(chosenCards)))
+stacks[Copper()] = 60 - 7 * len(players)
+stacks[Silver()] = 40
+stacks[Gold()] = 30
+stacks[Estate()] = 24 - 3 * len(players)
+stacks[Duchy()] = 12
+stacks[Province()] = 12
 
 play(stacks, CardCounts({Copper():7, Estate():3}), players)
