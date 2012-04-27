@@ -1,4 +1,4 @@
-import Player
+from Player import Player
 class Simple_Player(Player):
     def evaluate(gameState):
         return  gameState.abcs[gameState.turn]['actions'] + gameState.abcs[gameState.turn]['buys'] + gameState.abcs[gameState.turn]['coins'] +      totalTreasure(gameState)
