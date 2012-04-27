@@ -94,7 +94,7 @@ class PlayerCards(object):
     '''
         This method allows a person to gain a card
     '''
-    def gain(card):
+    def gain(self, card):
         self.discard[card] += 1
     '''
         This method draws N cards from the deck. If there are no more   
