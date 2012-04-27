@@ -5,7 +5,8 @@ class SimplePlayer(Player):
                 gameState.abcs[gameState.turn]['coins'] +
                 totalTreasure(gameState)
                 
-    def selectInput(self, inputs, gameState, actionSimulator=None):
+    def selectInput(self, inputs, gameState, actionSimulator=None,
+            helpMessage=None):
         m = -1
         choice = None
         for i in inputs:
