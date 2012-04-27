@@ -15,7 +15,7 @@ class InputSets(object):
     def handCardSet(gameState, number='ALL',filtered=None):
         hand = gameState.pcards[gameState.turn].hand;
         if filtered:
-            hand = CardCounts({k : v for k in hand if filtered(k)})
+            hand = CardCounts({k : hand[k] for k in hand if filtered(k)})
         handCards = itertools.chain.from_iterable(
                 (itertools.repeat(c, hand) for c in hand))
         

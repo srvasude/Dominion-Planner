@@ -11,10 +11,10 @@ class PlayerCards(object):
     '''
     def __init__(self, deck=CardCounts(), 
             discard=CardCounts(), hand=CardCounts(), currInPlay=CardCounts()):
-        self.deck = deck
-        self.discard = discard
-        self.hand = hand
-        self.currInPlay = currInPlay
+        self.deck = CardCounts(deck)
+        self.discard = CardCounts(discard)
+        self.hand = CardCounts(hand)
+        self.currInPlay = CardCounts(currInPlay)
 
     '''
         This method simulates the discard phase of the game.
@@ -65,7 +65,7 @@ class PlayerCards(object):
     '''
     def trashFromHand(self, *args):
         for card in args:
-            self.hand[card] -=1
+            self.hand[card] -= 1
     '''
         This method allows a player to reveal a card in the deck. This is
         implemented as a generator so that a player can keep revealing cards

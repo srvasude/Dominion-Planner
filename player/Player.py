@@ -37,5 +37,5 @@ class Player:
         hand = gameState.pcards[gameState.turn].hand
         total = 0
         for card in hand:
-            total += card.coins
+            total += card.coins*hand[card]
         return total

@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),
 from cards import *
 from util.Functions import CardCounts
 from player.Simple_Player import Simple_Player
-
+from player.Human_Player import Human_Player
 def play(cards, initialDeck, players):
     gs = GameState.setup(cards, initialDeck, players)
     numPlayers = len(gs.players);
@@ -22,7 +22,7 @@ def play(cards, initialDeck, players):
         gs.turn = (gs.turn + 1) % numPlayers
         numDepleted = len(filter(lambda c: gs.stacks[c] == 0, cards))
 def main():
-    players = [Simple_Player(), Simple_Player() ]
+    players = [Simple_Player(), Human_Player() ]
     chosenCards = random.sample(
         [Chancellor.Chancellor(), Council_room.Council_room(),
          Feast.Feast(), Festival.Festival(), Laboratory.Laboratory(), 
