@@ -1,12 +1,14 @@
 def play(cards, initialDeck, players):
     gs = GameState.setup(cards, intialDeck, players)
     numPlayers = len(gs.players);
-    while (gs.stacks[Province()] != 0) && (< 3 Piles are depleted):
+    numDepleted = 0
+    while (gs.stacks[Province()] != 0) and numDepleted < 3:
         curPlayer = gs.players[gs.turn]
         gs = curPlayer.playActionPhase(gs)
         gs = curPlayer.playBuyPhase(gs)
         gs = curPlayer.playDiscardPhase(gs)
         gs.turn = (gs.turn + 1) % numPlayers
+        numDepleted = len(filter(lambda c: gs.stacks[c] == 0, cards))
 
 players = []
 chosenCards = random.sample(
