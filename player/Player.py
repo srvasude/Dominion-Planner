@@ -19,7 +19,7 @@ class Player:
         if not gameState.abcs[gameState.turn]['actions']:
             return []
         return InputSets.handCardSet(gameState, number=1, 
-            lambda c: (c.action != None))
+            filtered = lambda c: (c.action != None))
 
     def availableBuys(self, gameState, money):
         if not gameState.abcs[gameState.turn]['buys']:
