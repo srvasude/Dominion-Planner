@@ -14,7 +14,8 @@ def lend(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     if gameState.pcards[gameState.turn][Copper()] > 0:
-        result = currentPlayer.selectInput(InputSet.tf(), gameState)
+        result = currentPlayer.selectInput(InputSet.tf(), gameState,
+                helpMessage='Do you want to trash a copper?')
         if result:
             gameState.pcards[gameState.turn][Copper()] -= 1
             gameState.trash[Copper()] += 1

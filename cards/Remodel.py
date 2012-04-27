@@ -14,7 +14,7 @@ def remod(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     result = currentPlayer.selectInput(InputSet.handCardSet(gameState, 1),
-            gameState)
+            gameState, helpMessage='Choose a card to trash')
     cards = gameState.pcard[gameState.turn]
     cards.hand[result] -= 1
     gameState.trash[result] += 1

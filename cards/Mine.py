@@ -17,7 +17,8 @@ def mine(gameState):
     currentPlayer = gameState.players[gameState.turn]
     minedCard = currentPlayer.selectInput(
             InputSets.handCardSet(gameState, 1, 
-                filtered=(lambda x: x.coins > 0)), gameState)
+            filtered=(lambda x: x.coins > 0)), gameState,
+            helpMessage = 'Which Treasure do you choose to Trash?')
     costs = [minedCard.cost + i for i in xrange(4)]
     gameState.trash[minedCard] += 1
     gameState.pcards[gameState.turn][minedCard] -= 1
