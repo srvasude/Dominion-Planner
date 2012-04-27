@@ -2,6 +2,8 @@ class CardCounts(dict):
     def __init__(self, *args, **kwargs):
         self.count = 0
         dict.__init__(self, *args, **kwargs)
+        for key in self:
+            self.count += self[key]
     def __getitem__(self, idx):
         self.setdefault(idx, 0)
         return dict.__getitem__(self, idx)

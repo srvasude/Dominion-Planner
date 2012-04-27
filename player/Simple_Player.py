@@ -28,7 +28,7 @@ class Simple_Player(Player):
                 if tempv >= v:
                     choice = a
                     v = tempv
-            if choice == None:
+            if not choice:
                 break
             else:
                 gameState.pcards[gameState.turn].discardFromHand(choice)
@@ -50,13 +50,13 @@ class Simple_Player(Player):
                 if self.valueCard(gameState, c) > m:
                     m = self.valueCard(gameState, c)
                     buy = c
-            if choice == None:
+            if not buy:
                 break
             else:
                 gameState.stacks[buy] -= 1
                 buys -= 1
                 coins -= buy.cost
-                cards.gain(buy)
+                gameState.pcards[gameState.turn].gain(buy)
         gameState.abcs[gameState.turn]['buys'] = buys
         gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
