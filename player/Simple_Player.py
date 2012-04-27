@@ -1,17 +1,14 @@
-class SimplePlayer(Player):
+import Player
+class Simple_Player(Player):
     def evaluate(gameState):
-        return  gameState.abcs[gameState.turn]['actions'] +
-                gameState.abcs[gameState.turn]['buys'] +
-                gameState.abcs[gameState.turn]['coins'] +
-                totalTreasure(gameState)
+        return  gameState.abcs[gameState.turn]['actions'] + gameState.abcs[gameState.turn]['buys'] + gameState.abcs[gameState.turn]['coins'] +      totalTreasure(gameState)
                 
     def selectInput(self, inputs, gameState, actionSimulator=None,
             helpMessage=None):
         m = -1
         choice = None
         for i in inputs:
-            temp = (evaluate(actionSimulator(gs, i)) +
-                    evaluate(actionSimulator(gs, i))) / 2.0
+            temp = (evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
             if temp > m:
                 m = temp
                 choice = i
