@@ -111,7 +111,7 @@ class PlayerCards(object):
         if (N > 0):
             if self.discard:
                 discardDeck = reduce(list.__add__, 
-                    [[c]*self.deck[c] for c in self.discard])
+                    [[c]*self.discard[c] for c in self.discard])
                 drawCards += random.sample(discardDeck, min(self.discard.count, N))
                 self.discardToDeck()
         
