@@ -103,9 +103,11 @@ class PlayerCards(object):
         then the drawing is done since there are no more cards to draw
     '''
     def draw(self, N):
-        drawDeck = reduce(list.__add__, [[c]*self.deck[c] for c in self.deck])
-        drawCards = random.sample(drawDeck, min(self.deck.count, N))
-        N -= self.deck.count
+        drawCards = []
+        if self.deck:
+            drawDeck = reduce(list.__add__, [[c]*self.deck[c] for c in self.deck])
+            drawCards = random.sample(drawDeck, min(self.deck.count, N))
+            N -= self.deck.count
         
         #In the case that there are no more cards to draw
         if (N > 0):
