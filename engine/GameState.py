@@ -10,7 +10,6 @@ class GameState(object):
         state = GameState()
         state.players = players
         state.pcards = [PlayerCards(deck = initialDeck) for p in players]
-        print state.pcards
         for c in state.pcards:
             c.draw(5);
         state.abcs = [{'actions':0, 'buys':0, 'coins':0} for p in players]
