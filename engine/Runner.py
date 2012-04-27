@@ -1,3 +1,5 @@
+import random
+from ..cards
 def play(cards, initialDeck, players):
     gs = GameState.setup(cards, intialDeck, players)
     numPlayers = len(gs.players);
@@ -12,8 +14,14 @@ def play(cards, initialDeck, players):
 
 players = []
 chosenCards = random.sample(
+<<<<<<< HEAD
     [Workshop(), Woodcutter(), Village(), Throne_room(), Smithy(), Remodel(), Moneylender(),
      Mine(), Market(), Laboratory(), Festival(), Feast(), Council_room(), Copper(), Chancellor()]
+=======
+    [Chancellor(), Chapel(), Council_room(),
+     Feast(), Festival(), Laboratory(), Library(), Market(),
+     Mine(), Moat(), Moneylender(), Remodel(), Smithy(), Throne_Room(), Village(), Woodcutter(), Workshop()]
+>>>>>>> 9f76eb848ee26c8b12fdda85b160ec1869cc8db2
     , 10)
 stacks = CardCounts(zip(chosenCards, [10] * len(chosenCards)))
 stacks[Copper()] = 60 - 7 * len(players)

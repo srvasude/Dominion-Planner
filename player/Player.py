@@ -1,5 +1,6 @@
 class Player:
-    def selectInput(self, inputs, gameState, actionSimulator=None):
+    def selectInput(self, inputs, gameState, actionSimulator=None,
+            helpMessage=None):
         return NotImplemented()
     
     def playActionPhase(self, gameState):
