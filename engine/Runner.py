@@ -2,11 +2,13 @@ import random
 import sys 
 import os.path 
 from GameState import GameState
+from PlayerCards import PlayerCards
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 
     os.path.pardir)))
 from cards import *
 from util.Functions import CardCounts
 from player.Simple_Player import Simple_Player
+
 def play(cards, initialDeck, players):
     gs = GameState.setup(cards, initialDeck, players)
     numPlayers = len(gs.players);
@@ -35,6 +37,7 @@ def main():
     stacks[Estate.Estate()] = 24 - 3 * len(players)
     stacks[Duchy.Duchy()] = 12
     stacks[Province.Province()] = 12
+    play(stacks, CardCounts({Copper.Copper():7, Estate.Estate():3}), players)
     
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 import itertools
 
-class InputSets:
+class InputSets(object):
     '''
         Return True, False choices
     '''

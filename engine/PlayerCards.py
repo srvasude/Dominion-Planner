@@ -1,11 +1,15 @@
 import random
-from ..util.Functions import CardCounts
-class PlayerCards(Object):
+import sys
+import os.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),
+    os.path.pardir)))
+from util.Functions import CardCounts
+class PlayerCards(object):
     '''
         A deck is a tuple/list of a CardCounts of cards, number of cards. The discard, hand and 
         currentlyInPlay also share a similar structure
     '''
-    def __init__(deck=None,discard=None,hand=None,currentlyInPlay=None)
+    def __init__(self, deck=None, discard=None, hand=None, currInPlay=None):
         self.deck = deck
         self.discard = discard
         self.hand = hand
