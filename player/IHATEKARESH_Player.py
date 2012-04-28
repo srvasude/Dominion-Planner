@@ -2,6 +2,7 @@ from Player import Player
 from sys import stdin
 
 class IHATEKARESH_Player(Player):
+<<<<<<< HEAD
     def setParams(self, params, goalDeck):
         self.params = params
         self.goalDeck = goalDeck
@@ -19,6 +20,22 @@ class IHATEKARESH_Player(Player):
             return None
         inputs_value = ((sum(self.evaluate(actionSimulator(gs, i)) for xrange(10))/10, i) for i in inputs) 
         return max(inputs_value)[1]
+    ''' YOUR WAY
+ m = -1
+        choice = None
+        inputs = list(inputs)
+        for i in inputs:
+            temp = 0
+            if actionSimulator != None:
+                gs = actionSimulator(gameState, i)
+                #bestStateAfterNMinus1Steps = MDP(gs, N-1)
+                #gs = bestStateAfterNMinus1Steps
+                temp = self.evaluate(gs)
+            if temp > m:
+                m = temp
+                choice = i
+        return choice
+'''
     
     def playActionPhase(self, gameState):
         gameState = gameState.clone()
@@ -30,7 +47,10 @@ class IHATEKARESH_Player(Player):
                 gs = gameState.clone()
                 gs.pcards[gs.turn].discardFromHand(a)
                 gs.abcs[gs.turn]['actions'] -= 1
-                tempv = self.evaluate(a.action(gs))
+                gs = a.action(gs))
+                #MDP should use some caching. maybe.
+                #gs = MDP(gs, N-1)
+                tempv = self.evaluate(gs)
                 if tempv >= v:
                     choice = a
                     v = tempv
@@ -43,7 +63,6 @@ class IHATEKARESH_Player(Player):
                 gameState = choice.action(gameState)
                 actions = self.availableActions(gameState)
         return gameState
-    
     def playBuyPhase(self, gameState):
         gameState = gameState.clone()
         buys = gameState.abcs[gameState.turn]['buys']
