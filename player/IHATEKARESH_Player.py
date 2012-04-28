@@ -125,7 +125,6 @@ class IHATEKARESH_Player(Player):
             gameState.pcards[gameState.turn].gain(buy)
             if buy in self.goalDeck:
                 cards_to_buy[buy] -= 1
-        gameState.abcs[gameState.turn]['buys'] = abcs['buys']
         gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
         
@@ -137,7 +136,11 @@ class IHATEKARESH_Player(Player):
     def valueCard(self, gameState, card, cards_to_buy):
         towards_goal_deck = int(card in cards_to_buy)
         num_left = gameState.stacks[card]
-        if card==Province.Province() and (gameState.abcs[gameState.turn]['coins']>=11):
+        card_amount = cards_to_buy[card]
+        in_goal_deck = towards_goal_deck*self.cvparams[0] + card_amount*self.cvparams[1]
+        
+        return card.cost*self.cvparams[2] + in_goal_deck
+        '''if card==Province.Province() and (gameState.abcs[gameState.turn]['coins']>=11):
             return 10000000
         if (card.victoryPoints or card==Copper.Copper() or (card==Silver.Silver() and gameState.pcards[0].allCards()[Silver.Silver()]>4)):
             return -2
@@ -147,5 +150,5 @@ class IHATEKARESH_Player(Player):
             return 10000*gameState.stacks[card]
         if card.cost==5:
             return 10000*gameState.stacks[card]
-        return self.params[0]*card.cost
+        return self.params[0]*card.cost '''
 
