@@ -21,7 +21,7 @@ class IHATEKARESH_Player(Player):
         inputs_value = ((sum(self.evaluate(actionSimulator(gs, i)) for xrange(10))/10, i) for i in inputs) 
         return max(inputs_value)[1]
     ''' YOUR WAY
- m = -1
+        m = -1
         choice = None
         inputs = list(inputs)
         for i in inputs:
@@ -35,7 +35,7 @@ class IHATEKARESH_Player(Player):
                 m = temp
                 choice = i
         return choice
-'''
+    '''
     
     def playActionPhase(self, gameState):
         gameState = gameState.clone()
@@ -63,6 +63,7 @@ class IHATEKARESH_Player(Player):
                 gameState = choice.action(gameState)
                 actions = self.availableActions(gameState)
         return gameState
+        
     def playBuyPhase(self, gameState):
         gameState = gameState.clone()
         abcs = gameState.abcs[gameState.turn]
