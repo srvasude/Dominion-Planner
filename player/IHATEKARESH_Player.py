@@ -4,6 +4,7 @@ from util.MDPBase import MarkovDecisionProcess
 
 class IHATEKARESH_Player(Player):
     def __init__(self, stacks, startDeck):
+        self._makingAction = False
         self.setParams((1,1,1,1), (), stacks+startDeck)
     
     def setParams(self, params, cvparams, goalDeck):
@@ -17,13 +18,22 @@ class IHATEKARESH_Player(Player):
                 + total_coins * self.params[2] + total_coins/(abcs['buys'] + 1)
                 * self.params[3])
                 
-    def selectInput(self, inputs, gameState, actionSimulator=None,
-            helpMessage=None):
+    def selectInput(self, inputs, gameState, actionSimulator=None, helpMessage=None):
+        _makingAction = self._makingAction
+        self._makingAction = False
         inputs = list(inputs)
         if (not inputs) or (not actionSimulator):
-            return None
-        inputs_value = ((sum((self.evaluate(actionSimulator(gameState, i)) for trial in xrange(10)))/10, i) for i in inputs) 
-        return max(inputs_value)[1]
+            selectedInput = None
+        else:
+            inputs_value = ((sum((self.evaluate(actionSimulator(gameState, i)) for trial in xrange(10)))/10, i) for i in inputs) 
+            selectedInput = max(inputs_value)[1]
+        if _makingAction:
+            self._makingAction = True
+            if hasattr(selectedInput, '__iter__'):
+                print '(' + selectedInput[0].name + ')',
+            else:
+                print '(' + str(selectedInput) + ')',
+        return selectedInput
     ''' YOUR WAY
         m = -1
         choice = None
@@ -53,10 +63,14 @@ class IHATEKARESH_Player(Player):
                 break
             else:
                 choice = choice[0]
-                print 'Play: ' + choice.name
+                print 'Play: ' + choice.name,
                 gameState.pcards[gameState.turn].discardFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
+                self._makingAction = True
                 gameState = choice.action(gameState)
+                self._makingAction = False
+                print '\n\t' + str(gameState.abcs[gameState.turn])
+                print '\thand: ' + str(gameState.pcards[gameState.turn].hand)
         return gameState
         
     def playBuyPhase(self, gameState):

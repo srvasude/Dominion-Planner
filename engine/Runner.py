@@ -59,7 +59,8 @@ def main():
     stacks[Province.Province()] = 12
     startDeck = CardCounts({Copper.Copper():7, Estate.Estate():3})
     
-    stacks -= startDeck * 1
+    NUMPLAYERS = 1
+    stacks -= startDeck * NUMPLAYERS
     players = [IHATEKARESH_Player(stacks, startDeck)]
     #players = [Simple_Player()]
     play(stacks, startDeck, players)

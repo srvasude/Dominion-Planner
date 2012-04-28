@@ -18,8 +18,29 @@ def mine(gameState):
     currentPlayer = gameState.players[gameState.turn]
     minedCard = currentPlayer.selectInput(
             InputSets.handCardSet(gameState, 1, 
-            filtered=(lambda x: x.coins > 0)), gameState,
+            filtered=(lambda x: x.coins > 0)), gameState, actionSimulator = mineSim1,
             helpMessage = 'Which Treasure do you choose to Trash?')
+    if minedCard == None:
+        return gameState
+    else:
+        minedCard = minedCard[0]
+    costs = [minedCard.cost + i for i in xrange(4)]
+    gameState.trash[minedCard] += 1
+    gameState.pcards[gameState.turn].hand[minedCard] -= 1
+    newCard = currentPlayer.selectInput(
+            InputSets.stackCardSet(gameState, 1, costs=costs,
+                filtered=(lambda x: x.coins > 0)), gameState, actionSimulator = mineSim2,)
+    if newCard == None:
+        return gameState
+    else:
+        newCard = newCard[0]
+    gameState.stacks[newCard] -= 1
+    gameState.pcards[gameState.turn].hand[newCard] += 1
+    return gameState
+
+def mineSim1(gameState, minedCard):
+    gameState = gameState.clone()
+    currentPlayer = gameState.players[gameState.turn]
     if minedCard == None:
         return gameState
     else:
@@ -37,3 +58,14 @@ def mine(gameState):
     gameState.stacks[newCard] -= 1
     gameState.pcards[gameState.turn].hand[newCard] += 1
     return gameState
+
+def mineSim2(gameState, newCard):
+    gameState = gameState.clone()
+    if newCard == None:
+        return gameState
+    else:
+        newCard = newCard[0]
+    gameState.stacks[newCard] -= 1
+    gameState.pcards[gameState.turn].hand[newCard] += 1
+    return gameState
+
