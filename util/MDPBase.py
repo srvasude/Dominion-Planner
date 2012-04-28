@@ -20,8 +20,7 @@ class MarkovNode(object):
     
 
 class MarkovDecisionProcess(object):
-    def  __init__(self, gameState, discount, 
-            rewardHeuristic, cutOff=1):
+    def  __init__(self, gameState, rewardHeuristic, discount=1, cutOff=1):
         self.start = MarkovNode(gameState)
         self.discount = discount
         self.reward = rewardHeuristic
@@ -41,6 +40,6 @@ class MarkovDecisionProcess(object):
             return (self.reward(mnode.state), ())
         else:
             bestA = max( ((self.recrun(mnode.applyAction(acard), n-1), acard) for acard in acards) )
-            bestA = (bestA[0][0], (bestA[1], ) + bestA[0][1])
+            bestA = ((self.reward(mnode.state) + self.discount * bestA[0][0])/(1 + self.discount), (bestA[1], ) + bestA[0][1])
             return bestA
     

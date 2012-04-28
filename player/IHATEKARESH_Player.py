@@ -6,7 +6,7 @@ from cards import *
 class IHATEKARESH_Player(Player):
     def __init__(self, stacks, startDeck):
         self._makingAction = False
-        self.setParams((1,10,3,0), (), stacks+startDeck)
+        self.setParams((1,10,3,0,5), (), stacks+startDeck)
     
     def setParams(self, params, cvparams, goalDeck):
         self.params = params
@@ -16,11 +16,12 @@ class IHATEKARESH_Player(Player):
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
         total_coins = abcs['coins'] + self.totalTreasure(gameState)
-        v = [0,0,0,0]
+        v = [0,0,0,0,0]
         v[0] = self.params[0] * abcs['actions'] * len(self.availableActions(gameState))
         v[1] = self.params[1] * min(abcs['buys'], 1+total_coins/5) * total_coins
         v[2] = self.params[2] * total_coins
         v[3] = self.params[3] * sum([c.cost*n for c,n in gameState.pcards[gameState.turn].allCards().items()])
+        v[4] = self.params[4] * (gameState.pcards[gameState.turn].currInPlay.count + gameState.pcards[gameState.turn].hand.count)
         return sum(v)
                 
     def selectInput(self, inputs, gameState, actionSimulator=None, helpMessage=None):
@@ -61,11 +62,26 @@ class IHATEKARESH_Player(Player):
         while self.availableActions(gameState):
             choice = None
             v = self.evaluate(gameState)
-            mdp = MarkovDecisionProcess(gameState, None, self.evaluate, cutOff = 3).run()
-            print v, mdp#debug
-            print': {', str(gameState.pcards[gameState.turn].deck), '} | {', str(gameState.pcards[gameState.turn].deck+gameState.pcards[gameState.turn].discard), '}'#debug
-            if (mdp[0] > v):
-                choice = mdp[1]
+            mdp1 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 1).run()
+            mdp2 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 2).run()
+            mdp3 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 3).run()
+            mdp4 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 4).run()
+            mdp5 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 5).run()
+            print v, mdp2#debug
+            print v, mdp3#debug
+            print v, mdp4#debug
+            print v, mdp5#debug
+            #print 't1', MarkovDecisionProcess(gameState, None, self.evaluate, cutOff = 2).run()#debug
+            #print 't2', MarkovDecisionProcess(gameState, None, self.evaluate, cutOff = 1).run()#debug
+            #print': {', str(gameState.pcards[gameState.turn].deck), '} | {', str(gameState.pcards[gameState.turn].deck+gameState.pcards[gameState.turn].discard), '}'#debug
+            if (mdp1[0] > v):
+                choice = mdp1[1]
+                
+            if mdp1[1][0]==mdp3[1][0] or mdp1[1][0]==mdp5[1][0]:
+                choice = mdp1[1]
+            else:
+                choice = mdp5[1]
+            print 'Choice:', choice[0].name, ' (' , mdp1[1][0].name, mdp3[1][0].name, mdp5[1][0].name, ')'
             if not choice:
                 break
             else:
@@ -78,7 +94,6 @@ class IHATEKARESH_Player(Player):
                 self._makingAction = False
                 print '\n\t' + str(gameState.abcs[gameState.turn])
                 print '\thand: ' + str(gameState.pcards[gameState.turn].hand)
-        print self.evaluate(gameState)#debug
         return gameState
         
     def playBuyPhase(self, gameState):
