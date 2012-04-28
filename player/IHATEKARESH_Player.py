@@ -70,26 +70,9 @@ class IHATEKARESH_Player(Player):
         while self.availableActions(gameState):
             choice = None
             v = self.evaluate(gameState)
-            mdp1 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 1).run()
-            mdp2 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 2).run()
-            mdp3 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 3).run()
-            mdp4 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 4).run()
-            mdp5 = MarkovDecisionProcess(gameState, self.evaluate, discount = .7, cutOff = 5).run()
-            print v, mdp2#debug
-            print v, mdp3#debug
-            print v, mdp4#debug
-            print v, mdp5#debug
-            #print 't1', MarkovDecisionProcess(gameState, None, self.evaluate, cutOff = 2).run()#debug
-            #print 't2', MarkovDecisionProcess(gameState, None, self.evaluate, cutOff = 1).run()#debug
-            #print': {', str(gameState.pcards[gameState.turn].deck), '} | {', str(gameState.pcards[gameState.turn].deck+gameState.pcards[gameState.turn].discard), '}'#debug
-            if (mdp1[0] > v):
-                choice = mdp1[1]
-                
-            if mdp1[1][0]==mdp3[1][0] or mdp1[1][0]==mdp5[1][0]:
-                choice = mdp1[1]
-            else:
-                choice = mdp5[1]
-            print 'Choice:', choice[0].name, ' (' , mdp1[1][0].name, mdp3[1][0].name, mdp5[1][0].name, ')'
+            mdp = MarkovDecisionProcess(gameState, self.evaluate, discount = 10000, cutOff = 3).run()
+            #if (mdp[0] > v):
+            choice = mdp[1]
             if not choice:
                 break
             else:
