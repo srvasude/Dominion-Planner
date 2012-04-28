@@ -13,7 +13,19 @@ def dbl(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     result = currentPlayer.selectInput(InputSets.handCardSet(gameState, 1, filtered = lambda c: (c.action != None)),
-            gameState, helpMessage='Choose which card to play twice')
+            gameState, actionSimulator=dblSimulator, helpMessage='Choose which card to play twice')
+    if result == None:
+        return gameState
+    else:
+        result = result[0]
+    gameState.pcards[gameState.turn].discardFromHand(result)
+    gameState = result.action(gameState)
+    gameState = result.action(gameState)
+    return gameState
+    
+def dblSimulator(gameState, inputValue):
+    gameState = gameState.clone()
+    result = inputValue
     if result == None:
         return gameState
     else:
