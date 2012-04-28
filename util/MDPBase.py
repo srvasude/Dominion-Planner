@@ -14,7 +14,10 @@ class MarkovNode(object):
         if self.abcs['actions'] == 0:
             return self
         else:
-            return MarkovNode(action_card.action(self.state))
+            state = self.state.clone()
+            state.pcards[state.turn].discardFromHand(action_card)
+            state.abcs[state.turn]['actions'] -= 1
+            return MarkovNode(action_card.action(state))
     
 
 class MarkovDecisionProcess(object):
@@ -24,31 +27,18 @@ class MarkovDecisionProcess(object):
         self.discount = discount
         self.reward = rewardHeuristic
         self.cutOff = cutOff
-    
-    '''
-        returns the tuple with the higher expected utility.
-        a1 and a2 are tuples of the form:
-        (action_card, expected_utility_of_playing_action_card)
-    '''
-    def _maxA(a1, a2):
-        if (a1[1] >= a2[1]):
-            return a1
-        else:
-            return a2
             
     '''
-        returns a tuple of the form ((bestACard_tuple), bestAExpectedValue)
+        returns a tuple of the form (bestAExpectedValue, (bestACard_tuple))
     '''
     def run(self, mnode = self.start, n = self.cutOff):
         if n == 0 or mnode.abcs['actions'] == 0:
-            return ((), self.rewardHeuristic(mnode.state))
-        bestA = ((), -1)
-        for acard in mnode.possibleActions():
-            curA = self.run(mnode=mnode.applyAction(acard), n=n-1)
-            curA = ((acard, ) + cur[0], curA[1])
-            bestA = _maxA(bestA, curA)
-        if bestA[1] == -1:
-            return ((), self.rewardHeuristic(mnode.state))
+            return (self.rewardHeuristic(mnode.state), ())
+        acards = mnode.possibleActions()
+        if not acards:
+            return return (self.rewardHeuristic(mnode.state), ())
         else:
+            bestA = max( (self.run(mnode=mnode.applyAction(acard), n=n-1), acard) for acard in acards) )
+            bestA = (bestA[0][0], bestA[1] + bestA[0][1])
             return bestA
     

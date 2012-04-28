@@ -9,16 +9,16 @@ class IHATEKARESH_Player(Player):
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
         total_coins = abcs['coins'] + self.totalTreasure(gameState)
-        return abcs['actions']*self.params[0] + abcs['buys']*self.params[1] 
-                + total_coins * params[2] + total_coins/(abcs['buys'] + 1)
-                * params[3]
+        return (abcs['actions']*self.params[0] + abcs['buys']*self.params[1] 
+                + total_coins * self.params[2] + total_coins/(abcs['buys'] + 1)
+                * self.params[3])
                 
     def selectInput(self, inputs, gameState, actionSimulator=None,
             helpMessage=None):
         inputs = list(inputs)
         if not inputs:
             return None
-        inputs_value = ((sum(self.evaluate(actionSimulator(gs, i)) for xrange(10))/10, i) for i in inputs) 
+        inputs_value = ((sum((self.evaluate(actionSimulator(gs, i)) for trial in xrange(10)))/10, i) for i in inputs) 
         return max(inputs_value)[1]
     ''' YOUR WAY
         m = -1
@@ -39,29 +39,20 @@ class IHATEKARESH_Player(Player):
     
     def playActionPhase(self, gameState):
         gameState = gameState.clone()
-        actions = self.availableActions(gameState)
-        while len(actions) > 0:
+        while self.availableActions(gameState):
             choice = None
             v = self.evaluate(gameState)
-            for a in actions:
-                gs = gameState.clone()
-                gs.pcards[gs.turn].discardFromHand(a)
-                gs.abcs[gs.turn]['actions'] -= 1
-                gs = a.action(gs))
-                #MDP should use some caching. maybe.
-                #gs = MDP(gs, N-1)
-                tempv = self.evaluate(gs)
-                if tempv >= v:
-                    choice = a
-                    v = tempv
+            mdp = MarkovDecisionProcess(gs, None, self.evaluate, cutOff = 2).run()
+            if (mpd[0] > v):
+                choice = mdp[1]
             if not choice:
                 break
             else:
+                choice = choice[0]
                 print 'Play: ' + choice.name
                 gameState.pcards[gameState.turn].discardFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = choice.action(gameState)
-                actions = self.availableActions(gameState)
         return gameState
         
     def playBuyPhase(self, gameState):
