@@ -1,7 +1,11 @@
 from Player import Player
 from sys import stdin
+from util.MDPBase import MarkovDecisionProcess
 
 class IHATEKARESH_Player(Player):
+    def __init__(self, stacks, startDeck):
+        self.setParams((1,1,1,1), (), stacks+startDeck)
+    
     def setParams(self, params, cvparams, goalDeck):
         self.params = params
         self.goalDeck = goalDeck
@@ -16,9 +20,9 @@ class IHATEKARESH_Player(Player):
     def selectInput(self, inputs, gameState, actionSimulator=None,
             helpMessage=None):
         inputs = list(inputs)
-        if not inputs:
+        if (not inputs) or (not actionSimulator):
             return None
-        inputs_value = ((sum((self.evaluate(actionSimulator(gs, i)) for trial in xrange(10)))/10, i) for i in inputs) 
+        inputs_value = ((sum((self.evaluate(actionSimulator(gameState, i)) for trial in xrange(10)))/10, i) for i in inputs) 
         return max(inputs_value)[1]
     ''' YOUR WAY
         m = -1
@@ -42,8 +46,8 @@ class IHATEKARESH_Player(Player):
         while self.availableActions(gameState):
             choice = None
             v = self.evaluate(gameState)
-            mdp = MarkovDecisionProcess(gs, None, self.evaluate, cutOff = 2).run()
-            if (mpd[0] > v):
+            mdp = MarkovDecisionProcess(gameState, None, self.evaluate, cutOff = 2).run()
+            if (mdp[0] > v):
                 choice = mdp[1]
             if not choice:
                 break
@@ -60,20 +64,20 @@ class IHATEKARESH_Player(Player):
         abcs = gameState.abcs[gameState.turn]
         coins = gameState.abcs[gameState.turn]['coins'] + self.totalTreasure(gameState)
         cards = gameState.pcards[gameState.turn] 
-        cards_to_buy = deck - cards.allCards()
+        cards_to_buy = self.goalDeck - cards.allCards()
         while abcs['buys'] > 0:
             possibleBuys = self.availableBuys(gameState, coins)
             if not possibleBuys:
                 break
-            value_buys = ((self.valueCard(gameState, c), c) for c in possibleBuys)
+            value_buys = ((self.valueCard(gameState, c, cards_to_buy), c) for c in possibleBuys)
             buy = max(value_buys)[1]
             gameState.stacks[buy] -= 1
-            buys -= 1
+            abcs['buys'] -= 1
             coins -= buy.cost
             gameState.pcards[gameState.turn].gain(buy)
             if buy in self.goalDeck:
                 cards_to_buy[buy] -= 1
-        gameState.abcs[gameState.turn]['buys'] = buys
+        gameState.abcs[gameState.turn]['buys'] = abcs['buys']
         gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
         
@@ -86,5 +90,5 @@ class IHATEKARESH_Player(Player):
         towards_goal_deck = int(card in cards_to_buy)
         num_left = gameState.stacks[card]
 
-        return self.paramscard.cost
+        return self.params[0]*card.cost
 

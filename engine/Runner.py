@@ -7,6 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),
     os.path.pardir)))
 from cards import *
 from util.Functions import CardCounts
+from player.IHATEKARESH_Player import IHATEKARESH_Player
 from player.Simple_Player import Simple_Player
 from player.Human_Player import Human_Player
 
@@ -42,7 +43,6 @@ def play(cards, initialDeck, players):
     
         
 def main():
-    players = [Simple_Player(), Human_Player()]
     chosenCards = random.sample(
         [Chancellor.Chancellor(), Council_room.Council_room(),
          Feast.Feast(), Festival.Festival(), Laboratory.Laboratory(), 
@@ -51,13 +51,18 @@ def main():
          Village.Village(), Woodcutter.Woodcutter(), Workshop.Workshop()]
         , 10)
     stacks = CardCounts(zip(chosenCards, [10] * len(chosenCards)))
-    stacks[Copper.Copper()] = 60 - 7 * len(players)
+    stacks[Copper.Copper()] = 60
     stacks[Silver.Silver()] = 40
     stacks[Gold.Gold()] = 30
-    stacks[Estate.Estate()] = 24 - 3 * len(players)
+    stacks[Estate.Estate()] = 24
     stacks[Duchy.Duchy()] = 12
     stacks[Province.Province()] = 12
-    play(stacks, CardCounts({Copper.Copper():7, Estate.Estate():3}), players)
+    startDeck = CardCounts({Copper.Copper():7, Estate.Estate():3})
+    
+    stacks -= startDeck * 1
+    players = [IHATEKARESH_Player(stacks, startDeck)]
+    #players = [Simple_Player()]
+    play(stacks, startDeck, players)
     
 if __name__ == "__main__":
     main()

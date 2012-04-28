@@ -1,14 +1,13 @@
 class MarkovNode(object):
     def __init__(self, gameState):
         self.state = gameState.clone() 
-        self.abcs = self.state.abcs[self.start.turn]
-        self.cards = self.state.pcards[self.start.turn]
+        self.abcs = self.state.abcs[self.state.turn]
+        self.cards = self.state.pcards[self.state.turn]
     
     def possibleActions(self):
-        if self.abcs['actions'] = 0:
+        if self.abcs['actions'] == 0:
             return []
-        return filter((lambda x : x.action != None), 
-                (for card in self.cards.hand))
+        return filter((lambda x : x.action != None), self.cards.hand.keys())
     
     def applyAction(self, action_card):
         if self.abcs['actions'] == 0:
@@ -31,14 +30,17 @@ class MarkovDecisionProcess(object):
     '''
         returns a tuple of the form (bestAExpectedValue, (bestACard_tuple))
     '''
-    def run(self, mnode = self.start, n = self.cutOff):
+    def run(self):
+        return self.recrun(self.start, self.cutOff)
+    
+    def recrun(self, mnode, n):
         if n == 0 or mnode.abcs['actions'] == 0:
-            return (self.rewardHeuristic(mnode.state), ())
+            return (self.reward(mnode.state), ())
         acards = mnode.possibleActions()
         if not acards:
-            return return (self.rewardHeuristic(mnode.state), ())
+            return (self.reward(mnode.state), ())
         else:
-            bestA = max( (self.run(mnode=mnode.applyAction(acard), n=n-1), acard) for acard in acards) )
-            bestA = (bestA[0][0], bestA[1] + bestA[0][1])
+            bestA = max( ((self.recrun(mnode.applyAction(acard), n-1), acard) for acard in acards) )
+            bestA = (bestA[0][0], (bestA[1], ) + bestA[0][1])
             return bestA
     
