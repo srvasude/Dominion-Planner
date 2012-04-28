@@ -14,7 +14,7 @@ class Simple_Player(Player):
         for i in inputs:
             temp = 0
             if actionSimulator != None:
-                temp = (self.evaluate(actionSimulator(gs, i)) + evaluate(actionSimulator(gs, i))) / 2.0
+                temp = (self.evaluate(actionSimulator(gameState, i)) + evaluate(actionSimulator(gameState, i))) / 2.0
             if temp > m:
                 m = temp
                 choice = i
