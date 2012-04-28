@@ -70,6 +70,17 @@ class PlayerCards(object):
             if (self.hand[card] > 0):
                 self.discard[card] += 1
                 self.hand[card] -= 1
+    
+    '''
+        This method discards from hand several cards passed
+        in as arguments.
+    '''
+    def playFromHand(self,*args):
+        for card in args:
+            if (self.hand[card] > 0):
+                self.currInPlay[card] += 1
+                self.hand[card] -= 1
+    
     '''
         This method trashes from hand several cards passed in
         as arguments. Another class should keep track of trashed

@@ -44,16 +44,14 @@ class CardCounts(dict):
         state.count = self.count
         return state
 
-    def __mul__(self, y ):
-        sum = 0
-        x = self
-        if len(x) > len(y):
-            x,y = y,x
-        for key in x:
-            if key not in y:
-                continue
-            sum += x[key] * y[key]
-        return sum
+    def __mul__(self, y):
+        multiple = CardCounts()
+        for key in self:
+            multiple[key] = y * self[key]
+        return multiple
+    
+    def __rmul__(self, y):
+        return self.__mul__(y)
 
     def __add__( self, y ):
         addend = CardCounts()

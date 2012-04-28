@@ -20,11 +20,11 @@ class InputSets(object):
                 (itertools.repeat(c, hand[c]) for c in hand))
         
         if number == 'ALL':
-            return itertools.chain.from_iterable(
+            return set(itertools.chain.from_iterable(
                     [itertools.combinations(handCards, i) 
-                    for i in range(hand.size + 1)])
+                    for i in range(hand.size + 1)]))
         else:
-            return itertools.combinations(handCards, number)
+            return set(itertools.combinations(handCards, number))
     
     @staticmethod
     def stackCardSet(gameState, number=1, costs=[], filtered=None):
@@ -35,5 +35,5 @@ class InputSets(object):
         if costs == []:
             costs = {c.cost for c in stacks}
         stacks = filter(lambda c: c.cost in costs and stackNums[c] > 0, stacks)
-        return itertools.combinations(stacks, number)
+        return set(itertools.combinations(stacks, number))
         
