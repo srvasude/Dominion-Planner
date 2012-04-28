@@ -2,10 +2,10 @@ from Player import Player
 from sys import stdin
 
 class IHATEKARESH_Player(Player):
-<<<<<<< HEAD
-    def setParams(self, params, goalDeck):
+    def setParams(self, params, cvparams, goalDeck):
         self.params = params
         self.goalDeck = goalDeck
+        self.cvparams = cvparams
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
         total_coins = abcs['coins'] + self.totalTreasure(gameState)
@@ -65,12 +65,11 @@ class IHATEKARESH_Player(Player):
         return gameState
     def playBuyPhase(self, gameState):
         gameState = gameState.clone()
-        buys = gameState.abcs[gameState.turn]['buys']
+        abcs = gameState.abcs[gameState.turn]
         coins = gameState.abcs[gameState.turn]['coins'] + self.totalTreasure(gameState)
-        ca
-        while buys > 0:
-            m = -1
-            buy = None
+        cards = gameState.pcards[gameState.turn] 
+        cards_to_buy = deck - cards.allCards()
+        while abcs['buys'] > 0:
             possibleBuys = self.availableBuys(gameState, coins)
             if not possibleBuys:
                 break
@@ -80,6 +79,8 @@ class IHATEKARESH_Player(Player):
             buys -= 1
             coins -= buy.cost
             gameState.pcards[gameState.turn].gain(buy)
+            if buy in self.goalDeck:
+                cards_to_buy[buy] -= 1
         gameState.abcs[gameState.turn]['buys'] = buys
         gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
@@ -89,10 +90,9 @@ class IHATEKARESH_Player(Player):
         gameState.pcards[gameState.turn].discardPhase()
         return gameState
     
-    def valueCard(self, gameState, card):
-        deck = self.goalDeck
-        cards = gameState.pcards[gameState.turn]
-        current_deck = cards.hand + cards.discard + cards.deck + cards.currInPlay 
-        cards_to_buy = deck - current_deck
-        return card.cost
+    def valueCard(self, gameState, card, cards_to_buy):
+        towards_goal_deck = int(card in cards_to_buy)
+        num_left = gameState.stacks[card]
+
+        return self.paramscard.cost
 

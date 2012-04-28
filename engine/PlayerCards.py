@@ -17,6 +17,11 @@ class PlayerCards(object):
         self.currInPlay = CardCounts(currInPlay)
 
     '''
+        This is method that returns all the cards
+    '''
+    def allCards(self):
+        return self.deck + self.discard + self.hand + self.currInPlay
+    '''
         This method returns a copy of self
     '''
     def copy(self):
