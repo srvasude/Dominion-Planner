@@ -47,7 +47,6 @@ def play(cards, initialDeck, players):
     print 'remaining provinces: ', gs.stacks[Province.Province()]
     print 'depleted piles: ', numDepleted 
     
-        
 def main():
     chosenCards = random.sample(
         [Chancellor.Chancellor(), Council_room.Council_room(),
@@ -69,25 +68,6 @@ def main():
     stacks -= startDeck * NUMPLAYERS
     players = [IHATEKARESH_Player(stacks, startDeck)]
     #players = [Simple_Player()]
-    play(stacks, startDeck, players)
-    
-def test1()
-    chosenCards = [Chancellor.Chancellor(), Council_room.Council_room(), Festival.Festival(), Laboratory.Laboratory(), Market.Market(),
-                    Throne_room.Throne_room(), Village.Village()]
-    chosenCards = [Village.Village(), Throne_room.Throne_room(), Festival.Festival(), Laboratory.Laboratory(), Market.Market(),]
-    stacks = CardCounts(zip(chosenCards, [10] * len(chosenCards)))
-    stacks[Copper.Copper()] = 60
-    stacks[Silver.Silver()] = 40
-    stacks[Gold.Gold()] = 30
-    stacks[Estate.Estate()] = 24
-    stacks[Duchy.Duchy()] = 12
-    stacks[Province.Province()] = 12
-    startDeck = CardCounts({Copper.Copper():7, Estate.Estate():3})
-    
-    #startDeck = CardCounts(zip([Copper.Copper(), Estate.Estate(), Feast.Feast(), Chancellor.Chancellor(), Mine.Mine(),     Moneylender.Moneylender(), Remodel.Remodel(), Throne_room.Throne_room(), Workshop.Workshop()],[3,2,1,1,1,1,0,1,1]))
-    NUMPLAYERS = 1
-    stacks -= startDeck * NUMPLAYERS
-    players = [IHATEKARESH_Player(stacks, startDeck)]
     play(stacks, startDeck, players)
     
 if __name__ == "__main__":

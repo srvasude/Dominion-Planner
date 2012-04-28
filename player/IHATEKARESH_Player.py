@@ -2,11 +2,12 @@ from Player import Player
 from sys import stdin
 from util.MDPBase import MarkovDecisionProcess
 from cards import *
+from engine.InputSets import InputSets
 
 class IHATEKARESH_Player(Player):
     def __init__(self, stacks, startDeck):
         self._makingAction = False
-        self.setParams((1,10,3,0,5), (), stacks+startDeck)
+        self.setParams((0,5,5,0,1), (), stacks+startDeck)
     
     def setParams(self, params, cvparams, goalDeck):
         self.params = params
@@ -15,16 +16,38 @@ class IHATEKARESH_Player(Player):
     
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
-        total_coins = abcs['coins'] + self.totalTreasure(gameState)
+        total_coins = abcs['coins'] + sum([card.coins*gameState.pcards[0].hand[card] for card in gameState.pcards[0].hand])
         v = [0,0,0,0,0]
-        v[0] = self.params[0] * abcs['actions'] * len(self.availableActions(gameState))
-        v[1] = self.params[1] * min(abcs['buys'], 1+total_coins/5) * total_coins
-        v[2] = self.params[2] * total_coins
-        v[3] = self.params[3] * sum([c.cost*n for c,n in gameState.pcards[gameState.turn].allCards().items()])
-        v[4] = self.params[4] * (gameState.pcards[gameState.turn].currInPlay.count + gameState.pcards[gameState.turn].hand.count)
-        return sum(v)
+        v[0] = abcs['actions'] * len(list(InputSets.handCardSet(gameState, number=1, filtered = lambda c: (c.action != None))))
+        v[1] = min(abcs['buys'], 1+total_coins/5) * total_coins
+        v[2] = total_coins
+        v[3] = sum([c.cost*n for c,n in gameState.pcards[gameState.turn].allCards().items()])
+        v[4] = (gameState.pcards[gameState.turn].currInPlay.count + gameState.pcards[gameState.turn].hand.count)
+        return sum([v[i]*self.params[i] for i in xrange(len(self.params))])
                 
     def selectInput(self, inputs, gameState, actionSimulator=None, helpMessage=None):
+        _makingAction = self._makingAction
+        self._makingAction = False
+        m = -1
+        choice = None
+        inputs = list(inputs)
+        for i in inputs:
+            temp = 0
+            if actionSimulator != None:
+                for x in xrange(3):
+                    gs = actionSimulator(gameState, i)
+                    temp += MarkovDecisionProcess(gs, self.evaluate, discount = 1000, cutOff = 2).run()[0]
+            if temp > m:
+                m = temp
+                choice = tuple(i)
+        if _makingAction:
+            self._makingAction = True
+            if hasattr(choice, '__iter__'):
+                print '(' + choice[0].name + ')',
+            else:
+                print '(' + str(choice) + ')',
+        return choice
+        '''
         _makingAction = self._makingAction
         self._makingAction = False
         inputs = list(inputs)
@@ -40,22 +63,7 @@ class IHATEKARESH_Player(Player):
             else:
                 print '(' + str(selectedInput) + ')',
         return selectedInput
-    ''' YOUR WAY
-        m = -1
-        choice = None
-        inputs = list(inputs)
-        for i in inputs:
-            temp = 0
-            if actionSimulator != None:
-                gs = actionSimulator(gameState, i)
-                #bestStateAfterNMinus1Steps = MDP(gs, N-1)
-                #gs = bestStateAfterNMinus1Steps
-                temp = self.evaluate(gs)
-            if temp > m:
-                m = temp
-                choice = i
-        return choice
-    '''
+        '''    
     
     def playActionPhase(self, gameState):
         gameState = gameState.clone()

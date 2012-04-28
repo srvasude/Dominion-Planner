@@ -1,3 +1,4 @@
+from GameState import GameState
 class MarkovNode(object):
     def __init__(self, gameState):
         self.state = gameState.clone() 
@@ -17,7 +18,6 @@ class MarkovNode(object):
             state.pcards[state.turn].playFromHand(action_card)
             state.abcs[state.turn]['actions'] -= 1
             return MarkovNode(action_card.action(state))
-    
 
 class MarkovDecisionProcess(object):
     def  __init__(self, gameState, rewardHeuristic, discount=1, cutOff=1):
