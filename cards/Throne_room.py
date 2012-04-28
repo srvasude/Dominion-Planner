@@ -18,7 +18,7 @@ def dbl(gameState):
         return gameState
     else:
         result = result[0]
-    gameState.pcards[gameState.turn].discardFromHand(result)
+    gameState.pcards[gameState.turn].playFromHand(result)
     gameState = result.action(gameState)
     gameState = result.action(gameState)
     return gameState
@@ -30,7 +30,7 @@ def dblSimulator(gameState, inputValue):
         return gameState
     else:
         result = result[0]
-    gameState.pcards[gameState.turn].discardFromHand(result)
+    gameState.pcards[gameState.turn].playFromHand(result)
     gameState = result.action(gameState)
     gameState = result.action(gameState)
     return gameState

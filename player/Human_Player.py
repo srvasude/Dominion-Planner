@@ -60,7 +60,7 @@ class Human_Player(Player):
                 print_discard(gameState)
             else:
                 i = int(option)
-                gameState.pcards[gameState.turn].discardFromHand(cards[i])
+                gameState.pcards[gameState.turn].playFromHand(cards[i])
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = cards[i].action(gameState)
                 cards = self.availableActions(gameState)

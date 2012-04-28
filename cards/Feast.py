@@ -13,13 +13,26 @@ def gainCard(gameState):
     gameState = gameState.clone()
     currentPlayer = gameState.players[gameState.turn]
     result = currentPlayer.selectInput(InputSets.stackCardSet(gameState,
-        costs=xrange(5+1)), gameState)
+        costs=xrange(5+1)), gameState, actionSimulator = actionSim)
     if result == None:
         return gameState
     else:
         result = result[0]
-    gameState.trash[gameState.turn] += 1
-    gameState.pcards[gameState.turn].hand[gameState.turn] -= 1
+    gameState.trash[Feast()] += 1
+    gameState.pcards[gameState.turn].currInPlay[Feast()] -= 1
     gameState.stacks[result] -= 1
     gameState.pcards[gameState.turn].gain(result)
     return gameState
+
+def actionSim(gameState, result):
+    gameState = gameState.clone()
+    if result == None:
+        return gameState
+    else:
+        result = result[0]
+    gameState.trash[Feast()] += 1
+    gameState.pcards[gameState.turn].currInPlay[Feast()] -= 1
+    gameState.stacks[result] -= 1
+    gameState.pcards[gameState.turn].gain(result)
+    return gameState
+

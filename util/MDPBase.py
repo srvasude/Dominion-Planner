@@ -14,7 +14,7 @@ class MarkovNode(object):
             return self
         else:
             state = self.state.clone()
-            state.pcards[state.turn].discardFromHand(action_card)
+            state.pcards[state.turn].playFromHand(action_card)
             state.abcs[state.turn]['actions'] -= 1
             return MarkovNode(action_card.action(state))
     

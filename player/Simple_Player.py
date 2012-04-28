@@ -28,7 +28,7 @@ class Simple_Player(Player):
             v = self.evaluate(gameState)
             for a in actions:
                 gs = gameState.clone()
-                gs.pcards[gs.turn].discardFromHand(a)
+                gs.pcards[gs.turn].playFromHand(a)
                 gs.abcs[gs.turn]['actions'] -= 1
                 tempv = self.evaluate(a.action(gs))
                 if tempv >= v:
@@ -38,7 +38,7 @@ class Simple_Player(Player):
                 break
             else:
                 print 'Play: ' + choice.name
-                gameState.pcards[gameState.turn].discardFromHand(choice)
+                gameState.pcards[gameState.turn].playFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 gameState = choice.action(gameState)
                 actions = self.availableActions(gameState)
