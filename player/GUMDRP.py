@@ -33,7 +33,7 @@ class GUMDRP(Player):
             if actionSimulator != None:
                 for x in xrange(3):
                     gs = actionSimulator(gameState, i)
-                    temp += MarkovDecisionProcess(gs, self.evaluate, discount = 1000, cutOff = 2).run()[0]
+                    temp += MarkovDecisionProcess(gs, self.evaluate, discount = 1000, cutOff = 0).run()[0]
             if temp > m:
                 m = temp
                 choice = tuple(i)
