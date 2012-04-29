@@ -25,8 +25,7 @@ class Chromosome(object):
         return string
     def copy(self):
         c = Chromosome(*self.genes)
-        c.wins = self.wins
-        c.second = self.second
+        c.cards = self.cards
         c.gamesPlayed = self.gamesPlayed
         return c
 class GeneticAlgorithm(object):
@@ -42,7 +41,7 @@ class GeneticAlgorithm(object):
         self.mutate_by = 5
         self.mutation_rate = .2
         self.breeding_factor = .2
-        self.crossover_rate = .5
+        self.crossover_rate = .3
 
         #Cards and Decks to test
         self.basic_cards = CardCounts({Copper.Copper() : 49, Silver.Silver() : 40, Gold.Gold() : 30, Estate.Estate() : 15, Duchy.Duchy() : 12, Province.Province() : 12})
@@ -57,12 +56,12 @@ class GeneticAlgorithm(object):
     #Initialize population
     def initialize(self):
         for i in xrange(self.population_size):
-            state_gene = [random.randrange(-100,100) for j in xrange(5)]
-            card_gene = [random.randrange(-100, 100) for j in xrange(3)]
+            state_gene = [random.randrange(-20,100) for j in xrange(5)]
+            card_gene = [random.randrange(-20, 100) for j in xrange(3)]
             self.chromosomes.append(Chromosome(state_gene, card_gene))
     #When to finish GA
     def goal(self):
-        return self.generations > 6
+        return False
 
     #Check if any agent completed the goalDeck
     def suboptimalDeck(self, gameState, goalDeck):
@@ -114,6 +113,10 @@ class GeneticAlgorithm(object):
             for i in xrange(len(gene)):
                 if random.random() < self.mutation_rate:
                     gene[i] += random.randrange(-self.mutate_by, self.mutate_by)
+                    if gene[i] > 100:
+                        gene[i] = 100
+                    elif gene[i] < -20:
+                        gene[i] = -20
 
     #Tournament to evaluate fittest individuals
     def play(self):
