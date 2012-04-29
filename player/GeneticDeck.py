@@ -14,12 +14,15 @@ def getDeck(cards, probs, size):
     deck = CardCounts(zip(cards, (int(round(p * size)) for p in probs)))
     return deck - deck * 0
 
-def clean(probs, deckSize, maxNum = array([24, 60, 40, 30] + [10]*10)*.7):
+def clean(probs, deckSize, locked=[0,1], maxNum = array([24, 60, 40, 30] + [10]*10)*.7):
+    probs = probs / sum(probs)
+    lockedProbs = probs[locked]
     probs *= deckSize
     probs = array([round(p) for p in probs])
     probs = array([min(p,m) for p,m in zip(probs, maxNum)])
-    return probs / sum(probs)
-    
+    probs = probs / (sum(probs) - sum(probs[locked])) * (1 - sum(lockedProbs))
+    probs[locked] = lockedProbs
+    return probs
 
 def mutate(probs, magnitude, locked = []):
     #probs = array([p + random.uniform(-magnitude, magnitude) for p in probs])
@@ -30,9 +33,6 @@ def mutate(probs, magnitude, locked = []):
     probs = probs / (sum(probs) - sum(probs[locked])) * (1 - sum(lockedProbs))
     probs[locked] = lockedProbs
     return probs
-
-def actionPhase(player, state):
-    return player.actionPhase(state)
 
 def evalDeck(player, deck, trials = 5):
     totalBuyingPower = 0
@@ -52,6 +52,16 @@ def evalDeck(player, deck, trials = 5):
         #print totalBuyingPower, '~\tbuys:', state.abcs[0]['buys'], '\tcoins:', totalCoins, '\taquired:', str(aquired), '\n'
     return (totalBuyingPower, totalAquiredValue)
 
+def generateDeck(cards, initProbs, locked, deckSize, player, trials = [(10,10),(10,3),(10,1)]):
+    for (tr,mag) in trials:
+        dv = range(tr)
+        for t in xrange(tr):
+            probs = clean(initProbs, deckSize)
+            probs = clean(mutate(probs, 3.*mag/deckSize, locked=locked), deckSize)
+            dv[t] = (evalDeck(player, getDeck(cards, probs, deckSize)), t, probs)
+        initProbs = max(dv)[2]
+    return getDeck(cards, initProbs, deckSize)
+    
 def main():
     cards = [Chancellor.Chancellor(), Council_room.Council_room(),
              Feast.Feast(), Festival.Festival(), Laboratory.Laboratory(), 
@@ -66,11 +76,13 @@ def main():
     initProbs = initProbs / sum(initProbs)
     player = GUMDRP(getDeck(cards, initProbs, deckSize), (0,5,5,0,1), (0,0,0,0,0,0,0,0))
     
-    trials = 15
+    print generateDeck(cards, initProbs, range(2), deckSize, player, trials = [(15,10),(10,3),(10,1)])
+    
+    '''
+    trials = 10
     dv = range(trials)
     for t in xrange(trials):
-        probs = clean(mutate(initProbs, 3.*5/deckSize, locked=range(2)), deckSize)
-        probs = clean(mutate(initProbs, 1, locked=range(2)), deckSize)
+        probs = clean(mutate(initProbs, 1, locked=range(2)), deckSize)############################################
         deck = getDeck(cards, probs, deckSize)
         dv[t] = (evalDeck(player, deck), t, probs)
         print dv[t][0], '\t', deck
@@ -100,9 +112,7 @@ def main():
     best = max(dv)
     print best
     print str(getDeck(cards, best[2], deckSize))
-
-
-
+    '''
 
 if __name__ == "__main__":
     main()
