@@ -8,8 +8,7 @@ class Card(object):
         object.__setattr__(self, 'action', action)
         object.__setattr__(self, 'reaction', reaction)
     def __hash__(self):
-        hsh = sum(hash(getattr(self, k)) for k in self.__slots__)
-        return hsh
+        return hash(getattr(self, 'name'))
     def __setattr__(*args):
         raise TypeError("Can't change immutable class")
     __delattr__ = __setattr__

@@ -6,7 +6,7 @@ class InputSets(object):
     '''
     @staticmethod
     def tf():
-        return set([True, False])
+        return set([(True,), (False,)])
 	'''
         Return a all combinations of in hand cards.  The number of cards
         in each combination can be set defining number. 

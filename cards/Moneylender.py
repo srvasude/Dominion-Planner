@@ -16,7 +16,7 @@ def lend(gameState):
     if gameState.pcards[gameState.turn].hand[Copper()] > 0:
         result = currentPlayer.selectInput(InputSets.tf(), gameState, actionSimulator = actionSim,
                 helpMessage='Do you want to trash a copper?')
-        if result:
+        if result and result[0]:
             gameState.pcards[gameState.turn].hand[Copper()] -= 1
             gameState.trash[Copper()] += 1
             gameState.abcs[gameState.turn]['coins'] += 3

@@ -15,7 +15,7 @@ def gainDiscard(gameState):
     gameState.abcs[gameState.turn]['coins'] += 2
     currentPlayer = gameState.players[gameState.turn]
     response = currentPlayer.selectInput(InputSets.tf(), gameState, actionSimulator = actionSim)
-    if response:
+    if response and response[0]:
         gameState.pcards[gameState.turn].deckToDiscard()
     return gameState
 

@@ -5,7 +5,7 @@ from cards import *
 from engine.InputSets import InputSets
 
 class GUMDRP(Player):
-    def __init__(self, params, cvparams, goalDeck):
+    def __init__(self, goalDeck, params, cvparams):
         self._makingAction = False
         self.params = params
         self.cvparams = cvparams
@@ -39,10 +39,10 @@ class GUMDRP(Player):
                 choice = tuple(i)
         if _makingAction:
             self._makingAction = True
-            if hasattr(choice, '__iter__'):
-                print '(' + choice[0].name + ')',
-            else:
-                print '(' + str(choice) + ')',
+#            if hasattr(choice, '__iter__'):
+ #               print '(' + choice[0].name + ')',
+  #          else:
+   #             print '(' + str(choice) + ')',
         return choice
         '''
         _makingAction = self._makingAction
@@ -74,14 +74,14 @@ class GUMDRP(Player):
                 break
             else:
                 choice = choice[0]
-                print 'Play: ' + choice.name,
+   #             print 'Play: ' + choice.name,
                 gameState.pcards[gameState.turn].playFromHand(choice)
                 gameState.abcs[gameState.turn]['actions'] -= 1
                 self._makingAction = True
                 gameState = choice.action(gameState)
                 self._makingAction = False
-                print '\n\t' + str(gameState.abcs[gameState.turn])
-                print '\thand: ' + str(gameState.pcards[gameState.turn].hand)
+    #            print '\n\t' + str(gameState.abcs[gameState.turn])
+     #           print '\thand: ' + str(gameState.pcards[gameState.turn].hand)
         return gameState
         
     def playBuyPhase(self, gameState):
@@ -119,7 +119,7 @@ class GUMDRP(Player):
         card_amount = cards_to_buy[card]
         in_goal_deck = towards_goal_deck*self.cvparams[0] + card_amount*self.cvparams[1]
         
-        return card.cost*self.cvparams[2] + in_goal_deck
+        return card.cost*self.cvparams[2] + in_goal_deck 
         '''if card==Province.Province() and (gameState.abcs[gameState.turn]['coins']>=11):
             return 10000000
         if (card.victoryPoints or card==Copper.Copper() or (card==Silver.Silver() and gameState.pcards[0].allCards()[Silver.Silver()]>4)):

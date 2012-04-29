@@ -39,8 +39,8 @@ class GeneticAlgorithm(object):
         #Parameters for Genetic Algorithm Tournament
         self.chromosomes = []
         self.generations = 0
-        self.times_to_play = 18
-        self.population_size = 100
+        self.times_to_play = 10
+        self.population_size = 40
 
         #Parameters for Crossing Genes
         self.mutate_by = 5
@@ -49,11 +49,11 @@ class GeneticAlgorithm(object):
         self.crossover_rate = .5
 
         #Cards and Decks to test
-        self.basic_cards = CardCounts({Copper.Copper() : 60, Silver.Silver() : 40, Gold.Gold() : 30, Estate.Estate() : 24, Duchy.Duchy() : 12, Province.Province() : 12})
-        self.gameA = CardCounts() + self.basic_cards
-        self.goal_deckA = CardCounts()
-        self.gameB = CardCounts() + self.basic_cards
-        self.goal_deckB = CardCounts()
+        self.basic_cards = CardCounts({Copper.Copper() : 49, Silver.Silver() : 40, Gold.Gold() : 30, Estate.Estate() : 15, Duchy.Duchy() : 12, Province.Province() : 12})
+        self.gameA = CardCounts({Market.Market() : 10, Village.Village() : 10, Woodcutter.Woodcutter() : 10, Smithy.Smithy() : 10, Laboratory.Laboratory() : 10, Festival.Festival() : 10, Council_room.Council_room() : 10, Mine.Mine() : 10, Feast.Feast() : 10, Chancellor.Chancellor() : 10}) + self.basic_cards
+        self.goal_deckA = CardCounts({Gold.Gold() : 4, Silver.Silver() : 2, Village.Village() : 3, Market.Market() : 2, Festival.Festival() : 4, Laboratory.Laboratory() : 4, Woodcutter.Woodcutter() : 1})
+        self.gameB = CardCounts({Throne_room.Throne_room() : 10, Remodel.Remodel() : 10, Mine.Mine() : 10, Workshop.Workshop() : 10, Feast.Feast() : 10, Festival.Festival() : 10, Market.Market() : 10, Smithy.Smithy() : 10, Moneylender.Moneylender() : 10, Chancellor.Chancellor() : 10}) + self.basic_cards
+        self.goal_deckB = CardCounts({Gold.Gold() : 4, Throne_room.Throne_room() : 2, Smithy.Smithy() : 2, Festival.Festival() : 3, Mine.Mine() : 1, Market.Market() : 3})
         self.gameC = CardCounts() + self.basic_cards
         self.goal_deckC = CardCounts()
         self.games = [[self.gameA, self.goal_deckA], [self.gameB, self.goal_deckB], [self.gameC, self.goal_deckC]]
@@ -121,8 +121,11 @@ class GeneticAlgorithm(object):
 
     #Tournament to evaluate fittest individuals
     def play(self):
+        sys.stdout.write('Iterating')
         startDeck = CardCounts({Copper.Copper():7, Estate.Estate():3})
         for chrm in self.chromosomes:
+            sys.stdout.write('.')
+            sys.stdout.flush()
             if chrm.gamesPlayed == self.times_to_play:
                 continue
             who_to_play = filter((lambda x: x.gamesPlayed < self.times_to_play), self.chromosomes)
@@ -135,7 +138,8 @@ class GeneticAlgorithm(object):
             gs = GameState.setup(gameType[0], startDeck, players)
             numPlayers = len(gs.players);
             numDepleted = 0
-            while (gs.stacks[Province.Province()] != 0) and numDepleted < 3 and not self.suboptimalDeck(gs, gameType[1]):
+            numMoves = 0
+            while (gs.stacks[Province.Province()] != 0) and numDepleted < 3 and not self.suboptimalDeck(gs, gameType[1]) and numMoves < 80:
                 curPlayer = gs.players[gs.turn]
                 gs.abcs[gs.turn] = {'actions':1, 'buys':1, 'coins':0}
                 gs = curPlayer.playActionPhase(gs)
@@ -143,11 +147,13 @@ class GeneticAlgorithm(object):
                 gs = curPlayer.playBuyPhase(gs)
                 gs = curPlayer.playDiscardPhase(gs)
                 gs.turn = (gs.turn + 1) % numPlayers
-                numDepleted = len(filter(lambda c: gs.stacks[c] == 0, cards))
+                numDepleted = len(filter(lambda c: gs.stacks[c] == 0, gs.stacks))
+                numMoves += 1
             cards_left = [((gameType[1] - gs.pcards[i].allCards()).count, i) for i in xrange(numPlayers)]
             cards_left.sort()
             for people in cards_left:
                 tourn[people[1]].incr(people[1])
+        print ''
 
     #GA
     def run(self):
