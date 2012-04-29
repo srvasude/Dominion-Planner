@@ -10,18 +10,14 @@ from engine.GameState import GameState
 class Chromosome(object):
     def __init__(self, *genes):
         self.genes = genes
-        self.wins = 0
-        self.second = 0
+        self.cards = 0
         self.gamesPlayed = 0
     def incr(self, place):
-        if place == 0:
-            self.wins += 1
-        elif place == 1:
-            self.second += 1
+        self.cards += place 
         self.gamesPlayed += 1
     def __cmp__(self, other):
-        return cmp((self.wins/(1.0 * self.gamesPlayed + 1), self.second), 
-                (other.wins/(1.0 * self.gamesPlayed + 1), other.second))
+        return cmp(self.cards/(1.0*self.gamesPlayed + 1),  
+                other.cards/(1.0 * self.gamesPlayed + 1))
     def __repr__(self):
         string = ''
         for i in xrange(len(self.genes)):
@@ -152,7 +148,7 @@ class GeneticAlgorithm(object):
             cards_left = [((gameType[1] - gs.pcards[i].allCards()).count, i) for i in xrange(numPlayers)]
             cards_left.sort()
             for people in cards_left:
-                tourn[people[1]].incr(people[1])
+                tourn[people[1]].incr(people[0])
         print ''
 
     #GA
