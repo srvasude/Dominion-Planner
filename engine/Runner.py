@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),
     os.path.pardir)))
 from cards import *
 from util.Functions import CardCounts
-from player.IHATEKARESH_Player import IHATEKARESH_Player
+from player.GUMDRP import GUMDRP
 from player.Simple_Player import Simple_Player
 from player.Human_Player import Human_Player
 
@@ -66,7 +66,7 @@ def main():
     
     NUMPLAYERS = 1
     stacks -= startDeck * NUMPLAYERS
-    players = [IHATEKARESH_Player(stacks, startDeck)]
+    players = [GUMDRP(stacks, startDeck)]
     #players = [Simple_Player()]
     play(stacks, startDeck, players)
     

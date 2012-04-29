@@ -4,15 +4,12 @@ from util.MDPBase import MarkovDecisionProcess
 from cards import *
 from engine.InputSets import InputSets
 
-class IHATEKARESH_Player(Player):
-    def __init__(self, stacks, startDeck):
+class GUMDRP(Player):
+    def __init__(self, params, cvparams, goalDeck):
         self._makingAction = False
-        self.setParams((0,5,5,0,1), (), stacks+startDeck)
-    
-    def setParams(self, params, cvparams, goalDeck):
         self.params = params
-        self.goalDeck = goalDeck
         self.cvparams = cvparams
+        self.goalDeck = goalDeck
     
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
