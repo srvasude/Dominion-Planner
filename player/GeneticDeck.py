@@ -7,7 +7,7 @@ from GUMDRP import GUMDRP
 from util.Functions import CardCounts
 from engine.GameState import GameState
 import scipy
-from scipy import array
+from scipy import array, append
 import random
 
 def getDeck(cards, probs, size):
@@ -19,9 +19,17 @@ def clean(probs, deckSize, locked=[0,1], maxNum = array([24, 60, 40, 30] + [10]*
     lockedProbs = probs[locked]
     probs *= deckSize
     probs = array([round(p) for p in probs])
-    probs = array([min(p,m) for p,m in zip(probs, maxNum)])
-    probs = probs / (sum(probs) - sum(probs[locked])) * (1 - sum(lockedProbs))
+    maxed = []
+    maxedProbs = array([])
+    for i in xrange(len(probs)):
+        if probs[i] > maxNum[i] and i not in locked:
+            maxed += [i]
+            maxedProbs = append(maxedProbs, 1.*maxNum[i]/deckSize)
+    probs = probs / (sum(probs) - sum(probs[locked]) - sum(probs[maxed])) * (1 - sum(lockedProbs) - sum(maxedProbs))
     probs[locked] = lockedProbs
+    probs[maxed] = maxedProbs
+    if array([round(probs[i]*deckSize)>maxNum[i] for i in xrange(len(probs)) if i not in locked]).any():
+        return clean(probs, deckSize, locked = locked + maxed)
     return probs
 
 def mutate(probs, magnitude, locked = []):
@@ -60,6 +68,7 @@ def generateDeck(cards, initProbs, locked, deckSize, player, trials = [(10,10),(
             probs = clean(mutate(probs, 3.*mag/deckSize, locked=locked), deckSize)
             dv[t] = (evalDeck(player, getDeck(cards, probs, deckSize)), t, probs)
         initProbs = max(dv)[2]
+    print initProbs
     return getDeck(cards, initProbs, deckSize)
     
 def main():
@@ -75,8 +84,8 @@ def main():
     initProbs = array([pse, psc, .5*(1-psc-pse), .5*(1-psc-pse)]+[1.0/10]*10)
     initProbs = initProbs / sum(initProbs)
     player = GUMDRP(getDeck(cards, initProbs, deckSize), (0,5,5,0,1), (0,0,0,0,0,0,0,0))
-    
-    print generateDeck(cards, initProbs, range(2), deckSize, player, trials = [(15,10),(10,3),(10,1)])
+        
+    print generateDeck(cards, initProbs, range(2), deckSize, player, trials = [(15,deckSize/3.),(10,3),(10,1)])
     
     '''
     trials = 10
