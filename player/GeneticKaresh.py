@@ -48,7 +48,7 @@ class GeneticAlgorithm(object):
         self.gameA = CardCounts({Market.Market() : 10, Village.Village() : 10, Woodcutter.Woodcutter() : 10, Smithy.Smithy() : 10, Laboratory.Laboratory() : 10, Festival.Festival() : 10, Council_room.Council_room() : 10, Mine.Mine() : 10, Feast.Feast() : 10, Chancellor.Chancellor() : 10}) + self.basic_cards
         self.goal_deckA = CardCounts({Gold.Gold() : 4, Silver.Silver() : 2, Village.Village() : 3, Market.Market() : 2, Festival.Festival() : 4, Laboratory.Laboratory() : 4, Woodcutter.Woodcutter() : 1})
         self.gameB = CardCounts({Throne_room.Throne_room() : 10, Remodel.Remodel() : 10, Mine.Mine() : 10, Workshop.Workshop() : 10, Feast.Feast() : 10, Festival.Festival() : 10, Market.Market() : 10, Smithy.Smithy() : 10, Moneylender.Moneylender() : 10, Chancellor.Chancellor() : 10}) + self.basic_cards
-        self.goal_deckB = CardCounts({Gold.Gold() : 4, Throne_room.Throne_room() : 2, Smithy.Smithy() : 2, Festival.Festival() : 3, Mine.Mine() : 1, Market.Market() : 3})
+        self.goal_deckB = CardCounts({Gold.Gold() : 4, Throne_room.Throne_room() : 1, Smithy.Smithy() : 2, Festival.Festival() : 3, Mine.Mine() : 1, Market.Market() : 3, Remodel.Remodel() : 1})
         self.gameC = CardCounts() + self.basic_cards
         self.goal_deckC = CardCounts()
         self.games = [[self.gameA, self.goal_deckA], [self.gameB, self.goal_deckB], [self.gameC, self.goal_deckC]]
