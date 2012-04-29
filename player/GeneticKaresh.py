@@ -1,26 +1,32 @@
 import random
 from GUMDRP import GUMDRP
+import sys
+import os.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 
+    os.path.pardir)))
+from cards import *
+from util.Functions import CardCounts
+from engine.GameState import GameState
 class Chromosome(object):
-    def __init__(self,*genes):
+    def __init__(self, *genes):
         self.genes = genes
         self.wins = 0
         self.second = 0
         self.gamesPlayed = 0
-    def incr(win=False):
-        if win:
+    def incr(self, place):
+        if place == 0:
             self.wins += 1
+        elif place == 1:
+            self.second += 1
         self.gamesPlayed += 1
-    def incr_second():
-        self.second += 1
     def __cmp__(self, other):
-        return cmp((self.wins, self.second), (other.wins, other.second))
+        return cmp((self.wins/(1.0 * self.gamesPlayed + 1), self.second), 
+                (other.wins/(1.0 * self.gamesPlayed + 1), other.second))
     def __repr__(self):
         string = ''
         for i in xrange(len(genes)):
             string += 'Gene {0}: {1} '.format(i, genes[i])
         print string
-    def getGenes(self):
-        return genes
     def copy(self):
         c = Chromosome(self.genes)
         c.wins = self.wins
@@ -40,21 +46,21 @@ breeding_factor = .2
 crossover_rate = .5
 
 #Cards and Decks to test
-basic_cards = CardCount({Copper.Copper() : 60, Silver.Silver() : 40, Gold.Gold() : 30, Estate.Estate() : 24, Duchy.Duchy() : 12, Province.Province() : 12})
-gameA = {} + basic_cards
-goal_deckA = {}
-gameB = {} + basic_cards
-goal_deckB = {}
-gameC = {} + basic_cards
-goal_deckC = {}
+basic_cards = CardCounts({Copper.Copper() : 60, Silver.Silver() : 40, Gold.Gold() : 30, Estate.Estate() : 24, Duchy.Duchy() : 12, Province.Province() : 12})
+gameA = CardCounts() + basic_cards
+goal_deckA = CardCounts()
+gameB = CardCounts() + basic_cards
+goal_deckB = CardCounts()
+gameC = CardCounts() + basic_cards
+goal_deckC = CardCounts()
 games = [[gameA, goal_deckA], [gameB, goal_deckB], [gameC, goal_deckC]]
 
 #Initialize population
 def initialize():
     for i in xrange(population_size):
         state_gene = [random.randrange(-100,100) for j in xrange(5)]
-        card_gene = [random.randrange(-100, 100) for j in xrange(5)]
-        chromosomes.append(Chromosome(state_gene, card_gene)
+        card_gene = [random.randrange(-100, 100) for j in xrange(3)]
+        chromosomes.append(Chromosome(state_gene, card_gene))
 #When to finish GA
 def goal():
     return generations > 6
@@ -72,8 +78,7 @@ def step():
     print 'Now Playing...'
     play()
     chromosomes.sort()
-    print 'Generation {0} Best chromosome is {1}'.format(generations,
-        chromosomes[0])
+    print 'Generation {0} Best chromosome is {1}'.format(generations, chromosomes[0])
     print 'Crossing Over...'
     crossover()
     generations += 1
@@ -120,14 +125,12 @@ def play():
         if chrm.gamesPlayed == times_to_play:
             continue
         who_to_play = filter((lambda x: x.gamesPlayed < 10), chromosomes)
-        if len(who_to_play) >= 3
-            tourn = random.sample(chromosomes, 2) 
-        else if 
+        tourn = random.sample(chromosomes, 2) 
         tourn.insert(0, chrm)
         gameType = random.choice(games)
         players = []
         for player in tourn:
-            players.append(GUMDRP(player.getGenes(), gameType[1]))
+            players.append(GUMDRP(gameType[1], *player.genes))
         gs = GameState.setup(gameType[0], startDeck, players)
         numPlayers = len(gs.players);
         numDepleted = 0
@@ -140,10 +143,11 @@ def play():
         gs = curPlayer.playDiscardPhase(gs)
         gs.turn = (gs.turn + 1) % numPlayers
         numDepleted = len(filter(lambda c: gs.stacks[c] == 0, cards))
-    cards_left = [((gameType[1] - gs.pcards[i]).count, i) 
+    cards_left = [((gameType[1] - gs.pcards[i].allCards()).count, i) 
         for i in xrange(numPlayers)]
     cards_left.sort()
-    cards_left[0
+    for people in cards_left:
+        tourn[people[1]].incr(people[1])
 
 #GA
 def main():
