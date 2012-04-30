@@ -92,7 +92,6 @@ class GUMDRP(Player):
         abcs = gameState.abcs[gameState.turn]
         coins = gameState.abcs[gameState.turn]['coins'] + self.totalTreasure(gameState)
         cards = gameState.pcards[gameState.turn] 
-        #cards_to_buy = self.goalDeck - cards.allCards()
         while abcs['buys'] > 0:
             possibleBuys = self.availableBuys(gameState, coins)
             if not possibleBuys:
@@ -106,8 +105,6 @@ class GUMDRP(Player):
             abcs['buys'] -= 1
             coins -= buy.cost
             gameState.pcards[gameState.turn].gain(buy)
-           # if buy in self.goalDeck:
-           #     cards_to_buy[buy] -= 1
         gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
         
@@ -120,12 +117,16 @@ class GUMDRP(Player):
         if card in [Copper.Copper(), Estate.Estate()]:
             return (0,0,-1)
         cards = gameState.pcards[gameState.turn]
-        if card in (self.goalDeck - cards.allCards()).keys():
+        
+        if len(self.goalDeck - cards.allCards())==0:
+            if card in [Province.Province()]:
+                return (10000,0,0)
+        if card in (self.goalDeck).keys():
             num_left = gameState.stacks[card]
             card_amount = (self.goalDeck - cards.allCards())[card]
             if card_amount == 0: card_amount = -100
             return (num_left*self.cvparams[0] + card_amount*self.cvparams[1]+ card.cost*self.cvparams[2], 0, 0)
-        if card in (self.miniDeck - cards.allCards()).keys():
+        if card in (self.miniDeck).keys():
             num_left = gameState.stacks[card]
             card_amount = (self.miniDeck - cards.allCards())[card]
             if card_amount == 0: card_amount = -100

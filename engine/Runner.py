@@ -34,7 +34,7 @@ def play(cards, initialDeck, players):
         #print("----------Player{0}'s action phase------------".format(gs.turn))
         gs = curPlayer.playActionPhase(gs)
         #print("----------Player{0}'s buy phase ({1} coins, {2} buys)----".format(gs.turn, gs.abcs[gs.turn]['coins'] + curPlayer.totalTreasure(gs), gs.abcs[gs.turn]['buys']))
-        print str(gs.abcs[gs.turn]['coins'] + curPlayer.totalTreasure(gs)) + '\t' + str(gs.abcs[gs.turn]['buys']) + '\t' + str(gs.players[0].goalDeck - gs.pcards[0].allCards())
+        print str(gs.abcs[gs.turn]['coins'] + curPlayer.totalTreasure(gs)) + '\t' + str(gs.abcs[gs.turn]['buys']) + '\t[' + str(gs.players[0].goalDeck - gs.pcards[0].allCards()) + ']'
         bought = gs.stacks.copy()
         gs = curPlayer.playBuyPhase(gs)
         #print("----------Player{0}'s has bought: ({1})----".format(gs.turn, str(bought - gs.stacks)))
