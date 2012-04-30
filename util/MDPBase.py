@@ -36,6 +36,7 @@ class MarkovDecisionProcess(object):
     def run(self):
         return self.recrun(self.start, self.cutOff)
     
+    '''
     def recrun(self, mnode, n):
         if n == 0 or mnode.abcs['actions'] == 0:
             return (self.reward(mnode.state), ())
@@ -46,4 +47,18 @@ class MarkovDecisionProcess(object):
             bestA = max( ((self.recrun(mnode.applyAction(acard), n-1), acard) for acard in acards) )
             bestA = ((self.reward(mnode.state) + self.discount * bestA[0][0])/(1 + self.discount), (bestA[1], ) + bestA[0][1])
             return bestA
+    '''
+            
+    def recrun(self, mnode, n):
+        if n == 0 or mnode.abcs['actions'] == 0:
+            return (self.reward(mnode.state), (), mnode.state)
+        acards = mnode.possibleActions()
+        if not acards:
+            return (self.reward(mnode.state), (), mnode.state)
+        else:
+            bestA = max( ((self.recrun(mnode.applyAction(acard), n-1), acard) for acard in acards) )
+            transitionValue = self.reward(bestA[0][2])-self.reward(mnode.state)
+            bestA = ((transitionValue + self.discount * bestA[0][0]), (bestA[1], ) + bestA[0][1], mnode.state)
+            return bestA
+    
     

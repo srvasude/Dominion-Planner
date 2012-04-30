@@ -10,6 +10,7 @@ class GUMDRP(Player):
         self.params = params
         self.cvparams = cvparams
         self.goalDeck = goalDeck
+        self.mdpDiscount = .7
     
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
@@ -33,7 +34,7 @@ class GUMDRP(Player):
             if actionSimulator != None:
                 for x in xrange(3):
                     gs = actionSimulator(gameState, i)
-                    temp += MarkovDecisionProcess(gs, self.evaluate, discount = 1000, cutOff = 0).run()[0]
+                    temp += MarkovDecisionProcess(gs, self.evaluate, discount = self.mdpDiscount, cutOff = 0).run()[0]
             if temp > m:
                 m = temp
                 choice = tuple(i)
@@ -67,7 +68,7 @@ class GUMDRP(Player):
         while self.availableActions(gameState):
             choice = None
             v = self.evaluate(gameState)
-            mdp = MarkovDecisionProcess(gameState, self.evaluate, discount = 10000, cutOff = 3).run()
+            mdp = MarkovDecisionProcess(gameState, self.evaluate, discount = self.mdpDiscount, cutOff = 3).run()
             #if (mdp[0] > v):
             choice = mdp[1]
             if not choice:
