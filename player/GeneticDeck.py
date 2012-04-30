@@ -7,14 +7,17 @@ from GUMDRP import GUMDRP
 from util.Functions import CardCounts
 from engine.GameState import GameState
 import scipy
-from scipy import array, append
+from scipy import array, append, nan
 import random
 
 def getDeck(cards, probs, size):
-    deck = CardCounts(zip(cards, (int(round(p * size)) for p in probs)))
+    nums = array([int(round(p)) for p in probs*size])
+    deck = CardCounts(zip(cards, nums))
     return deck - deck * 0
 
 def clean(probs, deckSize, locked=[0,1], maxNum = array([24, 60, 40, 30] + [10]*10)*.7):
+    if sum(probs)-sum(probs[locked]) == 0:
+        return probs/sum(probs) if sum(probs) else array(probs)
     probs = probs / sum(probs)
     lockedProbs = probs[locked]
     probs *= deckSize
@@ -25,6 +28,10 @@ def clean(probs, deckSize, locked=[0,1], maxNum = array([24, 60, 40, 30] + [10]*
         if probs[i] > maxNum[i] and i not in locked:
             maxed += [i]
             maxedProbs = append(maxedProbs, 1.*maxNum[i]/deckSize)
+    if (sum(probs) - sum(probs[locked]) - sum(probs[maxed])) == 0:
+        probs[locked] = lockedProbs
+        probs[maxed] = maxedProbs
+        return probs
     probs = probs / (sum(probs) - sum(probs[locked]) - sum(probs[maxed])) * (1 - sum(lockedProbs) - sum(maxedProbs))
     probs[locked] = lockedProbs
     probs[maxed] = maxedProbs
@@ -38,37 +45,46 @@ def mutate(probs, magnitude, locked = []):
     lockedProbs = probs[locked]
     magnitude /= 3.0
     probs = array([bool(p) * max(0, p + scipy.random.normal(0, magnitude)) for p in probs])
+    if sum(probs)-sum(probs[locked]) == 0:
+        probs[locked] = lockedProbs
+        return array(probs)
     probs = probs / (sum(probs) - sum(probs[locked])) * (1 - sum(lockedProbs))
     probs[locked] = lockedProbs
     return probs
 
-def evalDeck(player, deck, trials = 5):
+def evalDeck(player, deck, trials = 5, coinsPerBuy=8, aquireFilter = lambda c:True):
     totalBuyingPower = 0
     totalAquiredValue = 0
-    #state = GameState.setup(deck.copy(), deck.copy(), [player])
+    state = GameState.setup(deck.copy(), deck.copy(), [player])
+    #print str(deck)
     for t in xrange(trials):
-        state = GameState.setup(deck.copy(), deck.copy(), [player])
+        #state = GameState.setup(deck.copy(), deck.copy(), [player])
         state.abcs[0] = {'actions':1, 'buys':1, 'coins':0}
         #print str(state.pcards[0].hand)
         aquired = state.stacks.copy()
         state = state.players[0].playActionPhase(state)
         aquired -= state.stacks
-        totalAquiredValue += sum([c.cost*n for c,n in aquired.items()])
+        totalAquiredValue += sum([c.cost*n for c,n in aquired.items() if aquireFilter(c)])
         totalCoins = state.abcs[0]['coins'] + sum([c.coins*n for c,n in state.pcards[0].hand.items()])
-        totalBuyingPower += min(state.abcs[0]['buys']*8, totalCoins)
+        totalBuyingPower += min(state.abcs[0]['buys']*coinsPerBuy, totalCoins)
         state = state.players[0].playDiscardPhase(state)
         #print totalBuyingPower, '~\tbuys:', state.abcs[0]['buys'], '\tcoins:', totalCoins, '\taquired:', str(aquired), '\n'
     return (totalBuyingPower, totalAquiredValue)
 
-def generateDeck(cards, initProbs, locked, deckSize, player, trials = [(10,10),(10,3),(10,1)]):
+def generateDeck(cards, initProbs, locked, deckSize, params = (0,5,5,0,1), cvparams = (0,0,0,0,0,0,0,0), coinsPerBuy=8, prioritizeAquires=False, aquireFilter = lambda c:True, trials = [(10,10),(10,3),(10,1)], maxNum = array([24, 60, 40, 30] + [10]*10)*.7):
     for (tr,mag) in trials:
         dv = range(tr)
         for t in xrange(tr):
-            probs = clean(initProbs, deckSize)
-            probs = clean(mutate(probs, 3.*mag/deckSize, locked=locked), deckSize)
-            dv[t] = (evalDeck(player, getDeck(cards, probs, deckSize)), t, probs)
+            probs = array(initProbs)
+            probs = clean(mutate(probs, 3.*mag/deckSize, locked=locked), deckSize, maxNum=maxNum)
+            deck = getDeck(cards, probs, deckSize)
+            player = GUMDRP(getDeck(cards, probs, deckSize), params, cvparams)
+            if prioritizeAquires:
+                dv[t] = (sum(evalDeck(player, deck, aquireFilter=aquireFilter)), t, probs)
+            else:
+                dv[t] = (evalDeck(player, deck), t, probs)
         initProbs = max(dv)[2]
-    print initProbs
+    print max(dv)[0],
     return getDeck(cards, initProbs, deckSize)
     
 def main():
@@ -78,14 +94,22 @@ def main():
              Remodel.Remodel(), Smithy.Smithy(), Throne_room.Throne_room(), 
              Village.Village(), Woodcutter.Woodcutter(), Workshop.Workshop()]
     cards = [Estate.Estate(), Copper.Copper(), Silver.Silver(), Gold.Gold()] + random.sample(cards, 10) 
-    deckSize = 25
+    
+    deckSize = 17
     psc = 2.0*7/deckSize #percent starting coppers
     pse = 2.0*3/deckSize #percent starting estates
     initProbs = array([pse, psc, .5*(1-psc-pse), .5*(1-psc-pse)]+[1.0/10]*10)
     initProbs = initProbs / sum(initProbs)
-    player = GUMDRP(getDeck(cards, initProbs, deckSize), (0,5,5,0,1), (0,0,0,0,0,0,0,0))
-        
-    print generateDeck(cards, initProbs, range(2), deckSize, player, trials = [(15,deckSize/3.),(10,3),(10,1)])
+    print generateDeck(cards, initProbs, range(2), deckSize, params = (0,5,5,0,1), #[35, -2, -10, -17, 45], [27,-19,-3,-5,100], [73, 28, -3, 42, -20]
+        coinsPerBuy=8, prioritizeAquires=True, aquireFilter = lambda c: c==Province.Province(), trials = [(15,deckSize/3.),(10,3),(10,1)])
+    
+    miniDeckSize = 13
+    miniCards = [c for c in cards if c.cost<5]    
+    psc = 7./miniDeckSize #percent starting coppers
+    pse = 3./miniDeckSize #percent starting estates
+    miniInitProbs = array([pse, psc] + [(1.0-psc-pse)/(len(miniCards)-2)]*(len(miniCards)-2))
+    print generateDeck(miniCards, miniInitProbs, range(2), miniDeckSize, params=(0,5,5,0,1),
+        coinsPerBuy=6, prioritizeAquires=True, trials = [(25,miniDeckSize/3.),(15,3),(10,1)], maxNum = array([24, 60, 40]+[10]*10)*.7)
     
     '''
     trials = 10
