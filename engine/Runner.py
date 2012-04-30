@@ -66,7 +66,8 @@ def main():
     
     NUMPLAYERS = 1
     stacks -= startDeck * NUMPLAYERS
-    players = [GUMDRP(stacks, startDeck)]
+    
+    players = [GUMDRP(stacks, (0,5,1,0,3), (1,1,1))]
     #players = [Simple_Player()]
     play(stacks, startDeck, players)
     
