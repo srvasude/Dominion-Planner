@@ -15,10 +15,10 @@ def play(cards, initialDeck, players):
     gs = GameState.setup(cards, initialDeck, players)
     numPlayers = len(gs.players);
     numDepleted = 0
-    print "----------Game Starting--------------------"
-    print numPlayers, 'players:', players
-    print 'Starting deck:', str(initialDeck)
-    print 'Stacks:', str(cards), '\n'
+    #print "----------Game Starting--------------------"
+    #print numPlayers, 'players:', players
+    #print 'Starting deck:', str(initialDeck)
+    #print 'Stacks:', str(cards), '\n'
     gameLength = 0
     while (gs.stacks[Province.Province()] != 0) and numDepleted < 3:
         gameLength += 1
@@ -26,26 +26,31 @@ def play(cards, initialDeck, players):
         gs.abcs[gs.turn] = {'actions':1, 'buys':1, 'coins':0}
         import os
         os.system("clear")
-        print("----------Player{0}'s turn--------------------".format(gs.turn))
-        print 'Your deck:\t' + str(gs.pcards[gs.turn].deck)
-        print 'Your discard:\t' + str(gs.pcards[gs.turn].discard)
-        print 'Your hand:\t' + str(gs.pcards[gs.turn].hand)
+        #print("----------Player{0}'s turn--------------------".format(gs.turn))
+        #print 'Your deck:\t' + str(gs.pcards[gs.turn].deck)
+        #print 'Your discard:\t' + str(gs.pcards[gs.turn].discard)
+        #print 'Your hand:\t' + str(gs.pcards[gs.turn].hand)
         
-        print("----------Player{0}'s action phase------------".format(gs.turn))
+        #print("----------Player{0}'s action phase------------".format(gs.turn))
         gs = curPlayer.playActionPhase(gs)
-        print("----------Player{0}'s buy phase ({1} coins, {2} buys)----"
-                .format(gs.turn, gs.abcs[gs.turn]['coins'] + curPlayer.totalTreasure(gs), gs.abcs[gs.turn]['buys']))
+        #print("----------Player{0}'s buy phase ({1} coins, {2} buys)----".format(gs.turn, gs.abcs[gs.turn]['coins'] + curPlayer.totalTreasure(gs), gs.abcs[gs.turn]['buys']))
+        print str(gs.abcs[gs.turn]['coins'] + curPlayer.totalTreasure(gs)) + '\t' + str(gs.abcs[gs.turn]['buys']) + '\t' + str(str(gs.players[0].goalDeck) - gs.pcards[0].allCards())
         bought = gs.stacks.copy()
         gs = curPlayer.playBuyPhase(gs)
-        print("----------Player{0}'s has bought: ({1})----".format(gs.turn, str(bought - gs.stacks)))
+        #print("----------Player{0}'s has bought: ({1})----".format(gs.turn, str(bought - gs.stacks)))
         gs = curPlayer.playDiscardPhase(gs)
         gs.turn = (gs.turn + 1) % numPlayers
         numDepleted = len(filter(lambda c: gs.stacks[c] == 0, cards))
-        print("----------Player{0}'s turn has ended----------".format(gs.turn))
-        print("----------------------------------------------\n")
+        #print("----------Player{0}'s turn has ended----------".format(gs.turn))
+        #print("----------------------------------------------\n")
     print "Game Over ({0} turns): ".format(gameLength)
+    print 'depleted piles: ', numDepleted
     print 'remaining provinces: ', gs.stacks[Province.Province()]
-    print 'depleted piles: ', numDepleted 
+    print 'stacks:',str(gs.stacks)
+    print 'goal deck:', str(gs.players[0].goalDeck)
+    print 'mini deck:', str(gs.players[0].miniDeck)
+    print 'all player cards:',str(gs.pcards[0].allCards())
+     
     
 def main():
     chosenCards = random.sample(
@@ -67,7 +72,7 @@ def main():
     NUMPLAYERS = 1
     stacks -= startDeck * NUMPLAYERS
     
-    players = [GUMDRP(stacks, (0,5,1,0,3), (1,1,1))]
+    players = [GUMDRP(stacks, (0,5,1,0,3), (1,-1,2))]
     #players = [Simple_Player()]
     play(stacks, startDeck, players)
     

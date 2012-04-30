@@ -3,21 +3,23 @@ from sys import stdin
 from util.MDPBase import MarkovDecisionProcess
 from cards import *
 from engine.InputSets import InputSets
+import GeneticDeck
 
 class GUMDRP(Player):
-    def __init__(self, goalDeck, params, cvparams):
+    def __init__(self, stacks, params, cvparams):
         self._makingAction = False
         self.params = params
         self.cvparams = cvparams
-        self.goalDeck = goalDeck
-        self.mdpDiscount = .7
+        self.goalDeck = GeneticDeck.generateGoalDeck(stacks, stacks.keys(), params, reps = 1, deckSize = 17)
+        self.miniDeck = GeneticDeck.generateMiniDeck(stacks, stacks.keys(), params, reps = 1)
+        self.mdpDiscount = 1
     
     def evaluate(self, gameState):
         abcs = gameState.abcs[gameState.turn]
         total_coins = abcs['coins'] + sum([card.coins*gameState.pcards[0].hand[card] for card in gameState.pcards[0].hand])
         v = [0,0,0,0,0]
         v[0] = abcs['actions'] * len(list(InputSets.handCardSet(gameState, number=1, filtered = lambda c: (c.action != None))))
-        v[1] = min(abcs['buys'], 1+total_coins/5) * total_coins
+        v[1] = min(abcs['buys']*8, total_coins)
         v[2] = total_coins
         v[3] = sum([c.cost*n for c,n in gameState.pcards[gameState.turn].allCards().items()])
         v[4] = (gameState.pcards[gameState.turn].currInPlay.count + gameState.pcards[gameState.turn].hand.count)
@@ -90,22 +92,22 @@ class GUMDRP(Player):
         abcs = gameState.abcs[gameState.turn]
         coins = gameState.abcs[gameState.turn]['coins'] + self.totalTreasure(gameState)
         cards = gameState.pcards[gameState.turn] 
-        cards_to_buy = self.goalDeck - cards.allCards()
+        #cards_to_buy = self.goalDeck - cards.allCards()
         while abcs['buys'] > 0:
             possibleBuys = self.availableBuys(gameState, coins)
             if not possibleBuys:
                 break
-            value_buys = ((self.valueCard(gameState, c, cards_to_buy), c) for c in possibleBuys)
+            value_buys = ((self.valueCard(gameState, c), c) for c in possibleBuys)
             maxBuy = max(value_buys)
-            if maxBuy[0] < 0:
+            if maxBuy[0][2] < 0:
                 break;
             buy = maxBuy[1]
             gameState.stacks[buy] -= 1
             abcs['buys'] -= 1
             coins -= buy.cost
             gameState.pcards[gameState.turn].gain(buy)
-            if buy in self.goalDeck:
-                cards_to_buy[buy] -= 1
+           # if buy in self.goalDeck:
+           #     cards_to_buy[buy] -= 1
         gameState.abcs[gameState.turn]['coins'] = coins
         return gameState
         
@@ -114,13 +116,31 @@ class GUMDRP(Player):
         gameState.pcards[gameState.turn].discardPhase()
         return gameState
     
-    def valueCard(self, gameState, card, cards_to_buy):
+    def valueCard(self, gameState, card):
+        if card in [Copper.Copper(), Estate.Estate()]:
+            return (0,0,-1)
+        cards = gameState.pcards[gameState.turn]
+        if card in (self.goalDeck - cards.allCards()).keys():
+            num_left = gameState.stacks[card]
+            card_amount = (self.goalDeck - cards.allCards())[card]
+            if card_amount == 0: card_amount = -100
+            return (num_left*self.cvparams[0] + card_amount*self.cvparams[1]+ card.cost*self.cvparams[2], 0, 0)
+        if card in (self.miniDeck - cards.allCards()).keys():
+            num_left = gameState.stacks[card]
+            card_amount = (self.miniDeck - cards.allCards())[card]
+            if card_amount == 0: card_amount = -100
+            return (0, num_left*self.cvparams[0] + card_amount*self.cvparams[1]+ card.cost*self.cvparams[2], 0)
+        else:
+            return (0,0,card.cost)
+    
+        '''
         towards_goal_deck = int(card in cards_to_buy)
         num_left = gameState.stacks[card]
         card_amount = cards_to_buy[card]
         in_goal_deck = towards_goal_deck*self.cvparams[0] + card_amount*self.cvparams[1]
         
         return card.cost*self.cvparams[2] + in_goal_deck 
+        '''
         '''if card==Province.Province() and (gameState.abcs[gameState.turn]['coins']>=11):
             return 10000000
         if (card.victoryPoints or card==Copper.Copper() or (card==Silver.Silver() and gameState.pcards[0].allCards()[Silver.Silver()]>4)):
